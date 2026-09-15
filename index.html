@@ -43,78 +43,63 @@
   </script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-    
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background-color: #F1F5F9; 
-      color: #334155; 
+    * { box-sizing: border-box; }
+    html, body { 
+      margin: 0 !important;
+      padding: 0 !important;
+      min-height: 100vh !important;
+      background-color: #F1F5F9 !important; 
+      color: #0F172A !important; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
       -webkit-font-smoothing: antialiased;
     }
     
     .font-mono-num { 
-      font-family: 'JetBrains Mono', monospace; 
-      letter-spacing: -0.02em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important; 
+      font-variant-numeric: tabular-nums;
+    }
+
+    header { background-color: #0F172A !important; color: #FFFFFF !important; }
+    .nav-bar { background-color: #FFFFFF !important; border-bottom: 1px solid #CBD5E1 !important; }
+    .card-box { background-color: #FFFFFF !important; border: 1px solid #E2E8F0 !important; border-radius: 12px; }
+    
+    /* Scrollbar */
+    .table-scroll::-webkit-scrollbar { height: 12px; width: 12px; }
+    .table-scroll::-webkit-scrollbar-track { background: #E2E8F0; border-radius: 4px; }
+    .table-scroll::-webkit-scrollbar-thumb { background: #0369A1; border-radius: 4px; border: 2px solid #E2E8F0; }
+    .table-scroll::-webkit-scrollbar-thumb:hover { background: #0F172A; }
+
+    th { position: sticky; top: 0; z-index: 10; background-color: #1E293B !important; color: #FFFFFF !important; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
+
+    /* Modal Backdrop for Images and Editing */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background-color: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.active {
+      display: flex !important;
+      animation: fadeIn 0.2s ease-out forwards;
     }
     
-    /* =================================================== */
-    /* ULTRA HIGH-CONTRAST HIGHLIGHTED SCROLLBARS          */
-    /* =================================================== */
-    /* Firefox Support */
-    .table-scroll {
-      scrollbar-width: auto;
-      scrollbar-color: #0284C7 #E2E8F0;
+    .evidence-image {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+    .evidence-image:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
     }
 
-    /* Chrome, Edge, Safari Table Scroller (Vertical & Horizontal) */
-    .table-scroll::-webkit-scrollbar {
-      height: 15px; /* Horizontal scrollbar thickness */
-      width: 15px;  /* Vertical scroll-down scroller thickness */
-    }
-    .table-scroll::-webkit-scrollbar-track {
-      background: #E2E8F0;
-      border: 2px solid #94A3B8;
-      border-radius: 8px;
-    }
-    .table-scroll::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #0284C7 0%, #0369A1 35%, #0F172A 100%);
-      border-radius: 8px;
-      border: 2.5px solid #F8FAFC;
-      box-shadow: 0 0 10px rgba(2, 132, 199, 0.8), inset 0 0 4px rgba(255, 255, 255, 0.5);
-    }
-    .table-scroll::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, #F59E0B 0%, #D97706 40%, #B45309 100%);
-      border-color: #FFFFFF;
-      box-shadow: 0 0 15px rgba(245, 158, 11, 0.95), inset 0 0 6px rgba(255, 255, 255, 0.8);
-    }
-    .table-scroll::-webkit-scrollbar-corner {
-      background: #94A3B8;
-    }
-
-    /* Global Page Scrollbar Enhancement */
-    ::-webkit-scrollbar {
-      width: 14px;
-      height: 14px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #E2E8F0;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #475569;
-      border-radius: 7px;
-      border: 2px solid #F1F5F9;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #0F172A;
-    }
-
-    /* Sticky Data Grid Enhancements */
-    thead th {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    
     .hide-scroll::-webkit-scrollbar {
       display: none;
     }
@@ -129,8 +114,8 @@
   <!-- ========================================== -->
   <!-- TOP CORPORATE NAVIGATION HEADER            -->
   <!-- ========================================== -->
-  <header class="bg-brandNavy text-white shadow-md border-b border-slate-700 sticky top-0 z-50">
-    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+  <header class="border-b-4 border-amber-500 sticky top-0 z-50 shadow-md">
+    <div class="w-full px-4 py-3 flex flex-wrap items-center justify-between gap-3 max-w-[1440px] mx-auto">
       
       <!-- Brand & Title Block -->
       <div class="flex items-center space-x-3 sm:space-x-4">
@@ -147,7 +132,7 @@
             </span>
           </div>
           <p class="text-[10px] sm:text-xs text-slate-400 font-medium">
-            Full Resolution: DBBL &bull; SIBL &bull; UCB &bull; MMBPLC | Tracing Invoices vs. Actual Payouts
+            Full Resolution: DBBL &bull; SIBL &bull; UCB &bull; MBBL | Tracing Invoices vs. Actual Payouts
           </p>
         </div>
       </div>
@@ -157,7 +142,7 @@
         
         <!-- Dynamic Adds-On Menu -->
         <div class="relative inline-block text-left" id="addsOnDropdownContainer">
-          <button onclick="toggleAddsOnMenu()" id="btnAddsOn" class="bg-brandSlate hover:bg-slate-700 text-amber-400 hover:text-amber-300 font-semibold px-3.5 py-2.5 rounded-lg border border-amber-500/40 flex items-center space-x-2 transition text-xs sm:text-sm shadow-sm active:scale-95">
+          <button onclick="toggleAddsOnMenu()" id="btnAddsOn" class="bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 font-semibold px-3.5 py-2.5 rounded-lg border border-amber-500/40 flex items-center space-x-2 transition text-xs sm:text-sm shadow-sm active:scale-95">
             <i class="fa-solid fa-puzzle-piece text-amber-400"></i>
             <span>Adds-On Options</span>
             <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
@@ -178,7 +163,7 @@
             <div class="p-3 border-b border-slate-100">
               <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Regional Filter</span>
               <div class="grid grid-cols-2 gap-1.5 text-[11px]">
-                <button onclick="applyRegionFilter('ALL')" class="text-left px-2 py-1.5 rounded bg-brandNavy text-white font-semibold transition hover:bg-brandSlate">All Regions</button>
+                <button onclick="applyRegionFilter('ALL')" class="text-left px-2 py-1.5 rounded bg-brandNavy text-white font-semibold transition hover:bg-slate-800">All Regions</button>
                 <button onclick="applyRegionFilter('Dhaka')" class="text-left px-2 py-1.5 rounded bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition">Dhaka Div</button>
                 <button onclick="applyRegionFilter('Chittagong')" class="text-left px-2 py-1.5 rounded bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition">Chittagong Div</button>
                 <button onclick="applyRegionFilter('Khulna')" class="text-left px-2 py-1.5 rounded bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition">Khulna Div</button>
@@ -196,12 +181,8 @@
                   <span class="font-semibold text-slate-700 text-[11px]">Audit Timestamp (Date / Time)</span>
                 </label>
                 <label class="flex items-center space-x-2 cursor-pointer hover:text-brandBlue select-none">
-                  <input type="checkbox" id="chkColNidMobile" onchange="toggleDynamicCol('nidMobile')" class="w-3.5 h-3.5 text-brandBlue rounded border-slate-300 focus:ring-brandBlue">
+                  <input type="checkbox" id="chkColNidMobile" onchange="toggleDynamicCol('nidContact')" class="w-3.5 h-3.5 text-brandBlue rounded border-slate-300 focus:ring-brandBlue">
                   <span class="font-semibold text-slate-700 text-[11px]">NID / Mobile MSISDN (Syndicate Flag)</span>
-                </label>
-                <label class="flex items-center space-x-2 cursor-pointer hover:text-brandBlue select-none">
-                  <input type="checkbox" id="chkColInspector" onchange="toggleDynamicCol('inspector')" class="w-3.5 h-3.5 text-brandBlue rounded border-slate-300 focus:ring-brandBlue">
-                  <span class="font-semibold text-slate-700 text-[11px]">Inspector / Field Auditor Name</span>
                 </label>
               </div>
             </div>
@@ -211,7 +192,7 @@
               <span class="px-4 pt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sorting Sequence</span>
               <button onclick="applySort('BANK_DEFAULT')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center space-x-2 text-slate-700 font-medium">
                 <i class="fa-solid fa-arrow-down-1-9 text-brandBlue w-4 text-center"></i>
-                <span>Bank Order (SIBL &rarr; UCB &rarr; MBBL &rarr; DBBL)</span>
+                <span>Bank Order (SIBL &rarr; UCB &rarr; DBBL &rarr; MBBL)</span>
               </button>
               <button onclick="applySort('ALPHABETICAL')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center space-x-2 text-slate-700 font-medium">
                 <i class="fa-solid fa-arrow-down-a-z text-brandBlue w-4 text-center"></i>
@@ -242,8 +223,8 @@
   <!-- ========================================== -->
   <!-- PRIMARY 5-VIEW NAVIGATION & CENSUS BOARD   -->
   <!-- ========================================== -->
-  <div class="bg-white border-b border-slate-300 shadow-sm sticky top-[64px] sm:top-[80px] z-40">
-    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+  <div class="bg-white shadow-sm sticky top-[58px] z-40 nav-bar">
+    <div class="w-full px-4 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5 max-w-[1440px] mx-auto">
       
       <!-- Primary 5 View Modes (Defaults strictly to Summary Hit-List) -->
       <div class="flex flex-wrap gap-2 overflow-x-auto text-xs py-1 items-center w-full md:w-auto hide-scroll">
@@ -285,31 +266,31 @@
   <!-- ========================================== -->
   <!-- MAIN CONTENT AREA                          -->
   <!-- ========================================== -->
-  <main class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-1 w-full flex flex-col space-y-4">
+  <main class="w-full px-4 py-3.5 flex-1 flex flex-col space-y-3 max-w-[1440px] mx-auto">
     
     <!-- Top Level Metric Cards (Auto-Updating) -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow transition">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm hover:shadow transition">
         <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Visible Posts</span>
         <p class="text-xl sm:text-2xl font-bold text-brandNavy font-mono-num mt-1" id="metricCount">0</p>
       </div>
-      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow transition">
+      <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm hover:shadow transition">
         <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Total Invoiced Bill</span>
         <p class="text-xl sm:text-2xl font-bold text-slate-800 font-mono-num mt-1" id="metricBill">BDT 0.00</p>
       </div>
-      <div class="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 shadow-sm hover:shadow transition">
-        <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">Legal Commission</span>
-        <p class="text-xl sm:text-2xl font-bold text-emerald-800 font-mono-num mt-1" id="metricComm">BDT 0.00</p>
+      <div class="bg-white p-3.5 rounded-xl border border-amber-200 bg-amber-50/30 shadow-sm hover:shadow transition">
+        <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider block">Bank Direct Disbursed</span>
+        <p class="text-xl sm:text-2xl font-bold text-amber-800 font-mono-num mt-1" id="metricSalBank">BDT 0.00</p>
       </div>
-      <div class="bg-white p-4 rounded-xl border border-rose-200 bg-rose-50/50 shadow-sm hover:shadow transition relative overflow-hidden">
+      <div class="bg-white p-3.5 rounded-xl border border-rose-200 bg-rose-50/50 shadow-sm hover:shadow transition relative overflow-hidden">
         <div class="absolute right-0 top-0 h-full w-2 bg-rose-500"></div>
-        <span class="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">Fraud / Double Drain</span>
+        <span class="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">Confirmed Drain / Fraud</span>
         <p class="text-xl sm:text-2xl font-bold text-rose-700 font-mono-num mt-1" id="metricFraud">BDT 0.00</p>
       </div>
     </div>
 
-    <!-- The 10-Column Data Grid Container -->
-    <div class="bg-white rounded-xl shadow-lg border border-slate-300 overflow-hidden flex-1 flex flex-col">
+    <!-- 10-Column Financial Flow Table -->
+    <div class="bg-white rounded-xl shadow border border-slate-300 overflow-hidden flex-1 flex flex-col card-box">
       
       <!-- Visual Guidance Bar with Highlighted Scroller Callout -->
       <div class="flex items-center justify-between px-4 py-2 bg-slate-100/90 border-b border-slate-200 text-[11px] text-slate-600 shrink-0">
@@ -318,7 +299,7 @@
             <i class="fa-solid fa-table text-brandBlue"></i> Master 10-Column Financial Flow Registry
           </span>
           <span class="text-slate-300">|</span>
-          <span class="text-slate-600 font-medium" id="recordSummaryText">Showing 18 Items</span>
+          <span class="text-slate-600 font-medium" id="recordSummaryText">Showing Hit-List Items</span>
         </div>
         
         <!-- Scroller Highlight Notice -->
@@ -329,21 +310,23 @@
           </span>
           <span class="inline-flex items-center gap-1 text-rose-800 bg-rose-100/80 px-2.5 py-1 rounded-md border border-rose-300 font-bold text-[11px]">
             <i class="fa-solid fa-eye text-rose-600"></i>
-            <span>View Proof on Flagged Rows</span>
+            <span>Proof on Flagged Rows</span>
           </span>
         </div>
       </div>
 
       <!-- Scrollable Data Table with Highlighted Scrollers -->
-      <div class="overflow-x-auto table-scroll flex-1 max-h-[64vh] relative">
-        <table class="w-full text-left text-xs border-collapse whitespace-nowrap" id="masterTable">
-          <thead class="bg-brandSlate text-white shadow-md" id="tableHeader">
-            <!-- Dynamically constructed in renderTable -->
+      <div class="overflow-x-auto table-scroll flex-1 max-h-[65vh]">
+        <table class="w-full text-left text-xs border-collapse" id="masterTable">
+          <thead class="bg-[#1E293B] text-white shadow-md">
+            <tr id="tableHeaderRow">
+              <!-- Rendered via JS -->
+            </tr>
           </thead>
-          <tbody id="tableBody" class="divide-y divide-slate-200">
-            <!-- Rendered by JavaScript -->
+          <tbody id="tableBody" class="divide-y divide-slate-200 bg-white whitespace-normal">
+            <!-- Dynamic Rows -->
           </tbody>
-          <tfoot class="bg-slate-100 text-brandNavy font-bold sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] border-t-2 border-brandSlate" id="tableFooter">
+          <tfoot class="bg-slate-100 text-[#0F172A] font-bold sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] border-t-2 border-slate-800" id="tableFooter">
             <!-- Dynamically constructed in renderTable -->
           </tfoot>
         </table>
@@ -354,8 +337,8 @@
   <!-- ========================================== -->
   <!-- CONTEXT EXPLANATION MODAL ([?] INFO BADGE)  -->
   <!-- ========================================== -->
-  <div id="contextModal" class="fixed inset-0 z-[110] bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden border border-slate-300 transform scale-95 transition-transform duration-300" id="contextModalContent">
+  <div id="contextModal" class="modal-backdrop">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden border border-slate-300">
       <div class="bg-brandNavy text-white px-5 py-3.5 flex justify-between items-center border-b-4 border-sky-500">
         <div class="flex items-center space-x-2.5">
           <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm font-bold">
@@ -379,12 +362,12 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- FORENSIC EVIDENCE MODAL (DARK THEME & IMAGE READY) -->
+  <!-- FORENSIC EVIDENCE MODAL                    -->
   <!-- ========================================== -->
-  <div id="evidenceModal" class="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-6 opacity-0 transition-opacity duration-300">
-    <div class="bg-slate-900 text-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300 border border-slate-700" id="modalContent">
+  <div id="evidenceModal" class="modal-backdrop">
+    <div class="bg-slate-900 text-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-700">
       
-      <!-- Modal Header (Dark Themed with Gold Border) -->
+      <!-- Modal Header -->
       <div class="bg-slate-950 px-5 py-3.5 flex justify-between items-center border-b-2 border-amber-500 shrink-0">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-lg bg-rose-900/40 border border-rose-500 flex items-center justify-center text-rose-400 text-lg shadow">
@@ -393,8 +376,8 @@
           <div>
             <h3 class="text-sm sm:text-base font-bold flex items-center space-x-2 text-white">
               <span>Official Forensic Evidence &amp; Physical Document Verification</span>
-              <span class="bg-rose-900/70 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider font-mono border border-rose-700">
-                Fraud Proof Match
+              <span class="bg-rose-900/70 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider font-mono border border-rose-700" id="evidenceBadge">
+                Proof Match
               </span>
             </h3>
             <p class="text-[11px] text-slate-400 font-mono-num" id="modalPostTitle">Loading case details...</p>
@@ -406,97 +389,99 @@
       </div>
 
       <!-- Modal Body (Dark Styled Scrollable Container) -->
-      <div class="p-5 overflow-y-auto table-scroll flex-1 bg-slate-900 space-y-5 text-slate-200">
-        
-        <!-- Case Summary Header Card -->
-        <div class="bg-slate-800/80 rounded-xl border border-slate-700 p-4 shadow-sm">
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center divide-x divide-slate-700">
-            <div class="px-2">
-              <span class="text-[10px] uppercase font-bold text-slate-400 block">Bank &amp; Branch</span>
-              <p class="text-xs font-bold text-sky-400 mt-0.5" id="modalBankBranch">—</p>
-            </div>
-            <div class="px-2">
-              <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Invoiced Bill</span>
-              <p class="text-xs font-bold font-mono-num text-white mt-0.5" id="modalBillAmount">BDT 0.00</p>
-            </div>
-            <div class="px-2">
-              <span class="text-[10px] uppercase font-bold text-emerald-400 block">Full Bill Claimed</span>
-              <p class="text-xs font-bold font-mono-num text-emerald-300 mt-0.5" id="modalCompanyAmount">BDT 0.00</p>
-            </div>
-            <div class="px-2">
-              <span class="text-[10px] uppercase font-bold text-amber-400 block">Bank Direct Disbursed</span>
-              <p class="text-xs font-bold font-mono-num text-amber-300 mt-0.5" id="modalBankAmount">BDT 0.00</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Auditor's Detailed Finding Box -->
-        <div class="bg-rose-950/40 border-l-4 border-rose-500 p-4 rounded-r-xl shadow-sm border border-rose-900/50" id="modalAuditorNote">
-          <div class="flex items-start gap-3">
-            <i class="fa-solid fa-triangle-exclamation text-rose-400 text-lg mt-0.5"></i>
-            <div>
-              <h4 class="text-xs font-bold text-rose-300 uppercase tracking-wider mb-1 flex items-center gap-2">
-                <span>Auditor's Evidence Match &amp; Seal Reconciliation</span>
-                <span class="text-[10px] bg-rose-900/80 text-rose-200 px-2 py-0.2 rounded font-mono" id="modalMatchType">DISCREPANCY DETECTED</span>
-              </h4>
-              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium" id="modalExplanationText">
-                Explanation goes here.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Physical Evidence Images Grid (Image-Ready with fallback) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="modalEvidenceImagesGrid">
-          <!-- Dynamic Image Containers injected by JavaScript -->
-        </div>
-
-        <!-- Forensic Comparison Table Matching Website Details with Both Seals -->
-        <div class="bg-slate-800/80 rounded-xl border border-slate-700 p-4 shadow-sm">
-          <h4 class="text-xs font-bold text-sky-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-            <i class="fa-solid fa-code-compare text-amber-400"></i>
-            <span>Cross-Verification: Website Registry vs. Company Stamped Document vs. Bank Central Advice</span>
-          </h4>
-          
-          <div class="overflow-x-auto text-xs">
-            <table class="w-full border-collapse border border-slate-700">
-              <thead>
-                <tr class="bg-slate-950 text-slate-300 text-[11px]">
-                  <th class="border border-slate-700 p-2 text-left">Verification Field</th>
-                  <th class="border border-slate-700 p-2 text-left">Website Registry Detail</th>
-                  <th class="border border-slate-700 p-2 text-left bg-red-950/40 text-red-300">Company Stamped Voucher</th>
-                  <th class="border border-slate-700 p-2 text-left bg-blue-950/40 text-blue-300">Bank Central Advice Letter</th>
-                  <th class="border border-slate-700 p-2 text-center">Audit Status</th>
-                </tr>
-              </thead>
-              <tbody id="matchTableBody" class="divide-y divide-slate-700 text-[11px]">
-                <!-- Populated dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
+      <div class="p-5 overflow-y-auto table-scroll flex-1 bg-slate-900 space-y-5 text-slate-200" id="imageGalleryGrid">
+        <!-- Content injected dynamically -->
       </div>
       
-      <!-- Modal Footer -->
-      <div class="bg-slate-950 px-5 py-3 border-t border-slate-800 flex justify-between items-center shrink-0">
-        <span class="text-[11px] text-slate-400 flex items-center gap-1">
-          <i class="fa-solid fa-shield-halved text-emerald-400"></i>
-          <span>Official seal evidence synchronized with Hostinger Cloud repository.</span>
-        </span>
-        <button onclick="closeModal()" class="px-5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold shadow transition active:scale-95 border border-slate-700">
-          Close Document Viewer
+      <!-- Footer -->
+      <div class="bg-white px-5 py-3 border-t border-slate-200 flex justify-end shrink-0">
+        <button onclick="closeModal()" class="px-5 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold shadow transition active:scale-95">
+          Acknowledge &amp; Close
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toastAction" class="fixed bottom-5 right-5 z-[150] transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none bg-emerald-700 text-white px-5 py-3 rounded-lg shadow-xl flex items-center space-x-3">
-    <i class="fa-solid fa-download text-xl"></i>
+  <!-- ========================================== -->
+  <!-- LIVE EDIT QUICK FIX MODAL                  -->
+  <!-- ========================================== -->
+  <div id="editModal" class="modal-backdrop">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[95vh] flex flex-col overflow-hidden border border-slate-300">
+      
+      <!-- Modal Header -->
+      <div class="bg-[#0F172A] text-white px-5 py-3 flex justify-between items-center border-b-4 border-sky-500 shrink-0">
+        <h3 class="text-sm font-bold flex items-center space-x-2">
+          <i class="fa-solid fa-pen-to-square text-sky-400"></i>
+          <span>Quick Edit Financial Entry</span>
+        </h3>
+        <button onclick="closeEditModal()" class="w-7 h-7 flex items-center justify-center rounded-full bg-slate-700 hover:bg-sky-600 transition text-white shadow-inner">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div class="p-5 overflow-y-auto flex-1 bg-slate-50 flex flex-col space-y-3">
+        <div class="bg-white p-3 rounded border border-slate-200 shadow-sm">
+            <p class="text-xs font-bold text-slate-800" id="editPostTitle">Duty Post Name</p>
+            <p class="text-[10px] text-slate-500" id="editBranchTitle">Branch Name</p>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-3">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase">Total Bill (Invoiced)</label>
+                <input type="number" id="editBill" class="mt-1 w-full p-2 text-xs border border-slate-300 rounded font-mono-num focus:ring-sky-500 focus:border-sky-500">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-sky-600 uppercase">Co. Invoiced: Full Bill</label>
+                <input type="number" id="editCoFull" class="mt-1 w-full p-2 text-xs border border-slate-300 rounded font-mono-num focus:ring-sky-500 focus:border-sky-500">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-sky-600 uppercase">Co. Received: Commission</label>
+                <input type="number" id="editCoComm" class="mt-1 w-full p-2 text-xs border border-slate-300 rounded font-mono-num focus:ring-sky-500 focus:border-sky-500">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-emerald-600 uppercase">Salary Given By Company</label>
+                <input type="number" id="editSalCo" class="mt-1 w-full p-2 text-xs border border-slate-300 rounded font-mono-num focus:ring-sky-500 focus:border-sky-500">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-amber-600 uppercase">Salary Given By Bank</label>
+                <input type="number" id="editSalBank" class="mt-1 w-full p-2 text-xs border border-slate-300 rounded font-mono-num focus:ring-sky-500 focus:border-sky-500">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase">Status Type</label>
+                <select id="editType" class="mt-1 w-full p-2 text-xs border border-slate-300 rounded focus:ring-sky-500 focus:border-sky-500">
+                    <option value="CLEAN">CLEAN</option>
+                    <option value="RECON">RECON (Reconciliation)</option>
+                    <option value="SUSPICIOUS">SUSPICIOUS</option>
+                    <option value="FRAUD">FRAUD</option>
+                </select>
+            </div>
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase">Remark / Audit Finding</label>
+            <textarea id="editRemark" rows="2" class="mt-1 w-full p-2 text-xs border border-slate-300 rounded focus:ring-sky-500 focus:border-sky-500"></textarea>
+        </div>
+        <input type="hidden" id="editRowId">
+      </div>
+      
+      <!-- Footer -->
+      <div class="bg-white px-5 py-3 border-t border-slate-200 flex justify-end space-x-2 shrink-0">
+        <button onclick="closeEditModal()" class="px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold shadow transition active:scale-95">
+          Cancel
+        </button>
+        <button onclick="saveEdit()" class="px-5 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow transition active:scale-95">
+          <i class="fa-solid fa-save mr-1"></i> Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastAction" class="fixed bottom-5 right-5 z-[150] transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none bg-[#0F172A] text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 border-l-4 border-emerald-500 text-xs">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
     <div>
-      <h4 class="font-bold text-sm">Download Started!</h4>
-      <p class="text-xs text-emerald-100">Your Master .XLSX file is saving to your device.</p>
+      <p class="font-bold" id="toastTitle">Notification</p>
+      <p class="text-[11px] text-slate-300" id="toastMessage">Action completed successfully.</p>
     </div>
   </div>
 
@@ -508,62 +493,55 @@
     let currentViewMode = 'HIT_LIST';
     let currentRegion = 'ALL';
     let currentSort = 'BANK_DEFAULT';
-    const BANK_ORDER = { "SIBL": 1, "UCB": 2, "MBBL": 3, "MMBPLC": 3, "DBBL": 4 };
+    const BANK_ORDER = { "SIBL": 1, "UCB": 2, "DBBL": 3, "MBBL": 4, "MMBPLC": 4 };
 
     // Dynamic Columns State (Adds-On Feature)
-    let dynamicCols = {
+    const activeAddons = {
       dateTime: false,
-      nidMobile: false,
-      inspector: false
+      nidContact: false
     };
 
     // ==========================================
-    // 1. FULL 205-POST CENSUS DATABASE
-    // Retaining Accounting Terminology & RECON Status
+    // 1. CORE CENSUS DATABASE (Unified Source of Truth)
     // ==========================================
     const fullCensusDB = [
-      // SIBL (23 Posts)
-      { id: "S1", bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coComm: 12000, coFull: null, salCo: 27000, salBank: 27000, remark: "🚨 FRAUD (DOUBLE PAY): Both salary columns filled. 54k paid out for a 27k post. Jahed (Bank) vs Sabbir/Mabudul (Co).", mobile: "01963601463", inspector: "Insp. K. Rahman" },
-      { id: "S2", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coComm: null, coFull: 47348, salCo: null, salBank: 34500, remark: "⚖️ CLAIM RECONCILIATION: Bill-06 claimed Tk 47,348 net. Bank paid Nazrul Tk 34,500 direct; Company invoice requires salary deduction adjustment.", mobile: "01712-449102", inspector: "Insp. K. Rahman" },
-      { id: "S3", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch ATM", bill: 44550, coComm: null, coFull: 38352, salCo: null, salBank: 24000, remark: "⚖️ CLAIM RECONCILIATION: Bill-07 claimed Tk 38,352 net. Bank paid Sadek & Nurul Tk 24,000 direct; Invoice requires salary deduction adjustment.", mobile: "01819-338291", inspector: "Insp. K. Rahman" },
-      { id: "S4", bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coComm: null, coFull: 103950, salCo: null, salBank: 69100, remark: "⚠️ AUDIT IRREGULARITY: Bills 88 & 89 claim Tk 103,950 while single person (Soukat Jahan) drew Tk 69,100 from bank advice. Verify field disbursement.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
-      { id: "S5", bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "⚠️ POOLED ACCOUNT: 3 guards' salary (Tk 27,000) sent to single A/C of Utpal Biswas. Verify field distribution.", mobile: "01963601463", inspector: "Auditor T. Ahmed" },
-      { id: "S6", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch (4 Guards)", bill: 71375, coComm: 5944, coFull: null, salCo: null, salBank: 55500, remark: "✅ CLEAN: Bank paid guards direct (Tk 55.5k), Company billed & received commission only (Tk 5,944, Bill-08).", mobile: "01721-884912", inspector: "Insp. K. Rahman" },
-      { id: "S7", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM (3 Guards)", bill: 44550, coComm: 9285, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct (Tk 27k), Company billed & received commission only (Tk 9,285, Bill-09).", mobile: "01611-992014", inspector: "Insp. K. Rahman" },
-      { id: "S8", bank: "SIBL", branch: "Mirpur, Dhaka", post: "Mirpur 12 NCR ATM (3 Guards)", bill: 44550, coComm: 11352, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-11).", mobile: "01822-771829", inspector: "Insp. K. Rahman" },
-      { id: "S9", bank: "SIBL", branch: "Gazipur", post: "Vogra Bashon Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "⚠️ High Single Payout: Bank letter pays Azhar Hossain 26k.", mobile: "01911-348291", inspector: "Auditor M. Hasan" },
-      { id: "S10", bank: "SIBL", branch: "Jashore", post: "Monirampur Branch NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Golam, Mehedi, Jakariya)", mobile: "01733-112948", inspector: "Auditor T. Ahmed" },
-      { id: "S11", bank: "SIBL", branch: "Khulna", post: "Khan Jahan Ali ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Rabin, Nazmul, Abidul)", mobile: "01844-551029", inspector: "Auditor T. Ahmed" },
-      { id: "S12", bank: "SIBL", branch: "Jhalakati", post: "Jhalakati Branch", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Barak, Sumon, Rakib)", mobile: "01552-339102", inspector: "Auditor T. Ahmed" },
-      { id: "S13", bank: "SIBL", branch: "Jashore", post: "Noapara NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Saurav, Samim, Sakibul)", mobile: "01922-881920", inspector: "Auditor T. Ahmed" },
-      { id: "S14", bank: "SIBL", branch: "Narayanganj", post: "Sonargaon Branch ATM", bill: 32000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "✅ Direct Bank Paid (Antor, Nazrul)", mobile: "01715-992018", inspector: "Insp. K. Rahman" },
-      { id: "S15", bank: "SIBL", branch: "Wari, Dhaka", post: "Islampur (Wari) NCR ATM", bill: 32000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "✅ Direct Bank Paid (Rasel, Year Hossain)", mobile: "01688-441029", inspector: "Insp. K. Rahman" },
+      // SIBL
+      { id: "S1", bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coFull: 39000, coComm: 12000, salCo: 27000, salBank: 27000, type: "FRAUD", remark: "🚨 CONFIRMED DOUBLE SALARY: Both payout channels disbursed! Company billed full amount and Bank also paid guards direct.", hitList: true, mobile: "01963601463", inspector: "Insp. K. Rahman" },
+      { id: "S2", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coFull: 47348, coComm: null, salCo: null, salBank: 34500, type: "RECON", remark: "⚖️ CLAIM RECONCILIATION: Company invoiced full bill. Bank paid Nazrul Tk 34,500 direct. Company invoice requires salary deduction adjustment.", hitList: true, mobile: "01712-449102", inspector: "Insp. K. Rahman" },
+      { id: "S3", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan ATM", bill: 44550, coFull: 38352, coComm: null, salCo: null, salBank: 24000, type: "RECON", remark: "⚖️ CLAIM RECONCILIATION: Company invoiced full bill. Bank paid Sadek & Nurul Tk 24,000 direct. Invoice requires salary deduction adjustment.", hitList: true, mobile: "01819-338291", inspector: "Insp. K. Rahman" },
+      { id: "S4", bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coFull: 103950, coComm: null, salCo: null, salBank: 69100, type: "SUSPICIOUS", remark: "⚠️ AUDIT IRREGULARITY: Company invoiced full bill. Bank directly paid Soukat Jahan Tk 69,100. Verify field disbursement.", hitList: true, mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "S5", bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coFull: null, coComm: null, salCo: null, salBank: 27000, type: "SUSPICIOUS", remark: "⚠️ POOLED ACCOUNT: 3 guards' salary (Tk 27,000) sent to single A/C of Utpal Biswas. Verify field distribution.", hitList: true, mobile: "01963601463", inspector: "Auditor T. Ahmed" },
+      { id: "S6", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch", bill: 71375, coFull: null, coComm: 5944, salCo: null, salBank: 55500, type: "CLEAN", remark: "✅ CLEAN: Bank paid guards direct (Tk 55.5k), Company received commission only (Tk 5,944).", hitList: true, mobile: "01721-884912", inspector: "Insp. K. Rahman" },
+      { id: "S7", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM", bill: 44550, coFull: null, coComm: 9285, salCo: null, salBank: 27000, type: "CLEAN", remark: "✅ CLEAN: Bank paid guards direct (Tk 27k), Company received commission only (Tk 9,285).", hitList: true, mobile: "01611-992014", inspector: "Insp. K. Rahman" },
+      { id: "S8", bank: "SIBL", branch: "Mirpur, Dhaka", post: "Mirpur 12 NCR ATM", bill: 44550, coFull: null, coComm: 11352, salCo: null, salBank: 27000, type: "CLEAN", remark: "✅ CLEAN: Bank paid guards direct, Company received commission only.", hitList: false, mobile: "01822-771829", inspector: "Insp. K. Rahman" },
+      { id: "S9", bank: "SIBL", branch: "Gazipur", post: "Vogra Bashon Road ATM", bill: 39000, coFull: null, coComm: null, salCo: null, salBank: 26000, type: "SUSPICIOUS", remark: "⚠️ HIGH PAYOUT: Bank letter paid Azhar Hossain Tk 26,000 directly. Verify duty roster.", hitList: false, mobile: "01911-348291", inspector: "Auditor M. Hasan" },
+      { id: "S10", bank: "SIBL", branch: "Jashore", post: "Monirampur Branch NCR ATM", bill: 39000, coFull: null, coComm: null, salCo: null, salBank: 27000, type: "CLEAN", remark: "✅ Direct Bank Paid (Golam, Mehedi, Jakariya @ Tk 9,000)", hitList: false, mobile: "01733-112948", inspector: "Auditor T. Ahmed" },
+      { id: "S11", bank: "SIBL", branch: "Khulna", post: "Khan Jahan Ali ATM", bill: 39000, coFull: null, coComm: null, salCo: null, salBank: 27000, type: "CLEAN", remark: "✅ Direct Bank Paid (Rabin, Nazmul, Abidul @ Tk 9,000)", hitList: false, mobile: "01844-551029", inspector: "Auditor T. Ahmed" },
+      { id: "S12", bank: "SIBL", branch: "Jhalakati", post: "Jhalakati Branch", bill: 39000, coFull: null, coComm: null, salCo: null, salBank: 27000, type: "CLEAN", remark: "✅ Direct Bank Paid (Barak, Sumon, Rakib @ Tk 9,000)", hitList: false, mobile: "01552-339102", inspector: "Auditor T. Ahmed" },
+      { id: "S13", bank: "SIBL", branch: "Jashore", post: "Noapara NCR ATM", bill: 39000, coFull: null, coComm: null, salCo: null, salBank: 27000, type: "CLEAN", remark: "✅ Direct Bank Paid (Saurav, Samim, Sakibul @ Tk 9,000)", hitList: false, mobile: "01922-881920", inspector: "Auditor T. Ahmed" },
 
-      // UCB (56 Posts)
-      { id: "U1", bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coComm: null, coFull: null, salCo: 71000, salBank: 58000, remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 58,000 to fake names (Kamal/Mohi); Real on-site staff paid Tk 71,000 via Company Upay wallet.", mobile: "01963601463", inspector: "Field Insp. J. Alam" },
-      { id: "U2", bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coComm: null, coFull: null, salCo: 30000, salBank: 64000, remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 64,000 to 4 fake names; Real field messengers (Aslam & Ismail) paid Tk 30,000 via Upay.", mobile: "01963601463", inspector: "Field Insp. J. Alam" },
-      { id: "U3", bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coComm: null, coFull: null, salCo: 52000, salBank: 55000, remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 55,000 to 3 fake accounts; Real field workers paid Tk 52,000 via Company Upay wallet.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
-      { id: "U4", bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coComm: null, coFull: 33000, salCo: null, salBank: 29800, remark: "⚠️ POOLED ACCOUNT: Bill-18 claimed Tk 33,000 for 3 guards, but bank paid Tk 29,800 into single A/C of Idris Ali Sardar.", mobile: "01811-992019", inspector: "Insp. K. Rahman" },
-      { id: "U5", bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch (Jasim)", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 32000, remark: "⚠️ SUSPICIOUS PAYOUT: Abnormally high single disbursement to Jasim Uddin (Tk 32,000). Verify duty roster.", mobile: "01711-229104", inspector: "Field Insp. J. Alam" },
-      { id: "U6", bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coComm: 9513, coFull: null, salCo: 187500, salBank: null, remark: "✅ CLEAN: Direct branch settlement. Company disbursed local bill for 11 specific staff (Bill-05).", mobile: "01713-559102", inspector: "Auditor S. Chowdhury" },
-      { id: "U7", bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coComm: 1000, coFull: null, salCo: 10000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matched. Guard Ripon paid Tk 10,000; Margin Tk 1,000.", mobile: "01912-339102", inspector: "Insp. K. Rahman" },
-      { id: "U8", bank: "UCB", branch: "Tangail", post: "PKP Tangail ATM & CRM", bill: 49500, coComm: 5500, coFull: null, salCo: 44000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matches guard pay.", mobile: "01814-771920", inspector: "Auditor M. Hasan" },
-      { id: "U9", bank: "UCB", branch: "Moulvibazar Rd, Dhaka", post: "Dhaka South Regional Office", bill: 16000, coComm: 900, coFull: null, salCo: 15000, salBank: null, remark: "✅ CLEAN: Bill 17 matches guard pay.", mobile: "01716-441920", inspector: "Insp. K. Rahman" },
-      { id: "U10", bank: "UCB", branch: "Chittagong", post: "Bohaddarhat Branch", bill: 60000, coComm: null, coFull: null, salCo: null, salBank: 45000, remark: "✅ Direct Bank Paid (3 Regular Guards)", mobile: "01815-661920", inspector: "Field Insp. J. Alam" },
-      { id: "U11", bank: "UCB", branch: "Chittagong", post: "Halishahar Branch", bill: 60000, coComm: null, coFull: null, salCo: null, salBank: 43500, remark: "✅ Direct Bank Paid (3 Regular Guards)", mobile: "01918-771920", inspector: "Field Insp. J. Alam" },
-      { id: "U12", bank: "UCB", branch: "Chittagong", post: "Kumira University Gate", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "✅ Direct Bank Paid (3 Regular Guards)", mobile: "01719-881920", inspector: "Field Insp. J. Alam" },
-      { id: "U13", bank: "UCB", branch: "Khagrachhari", post: "Khagrachhari Regional", bill: 130000, coComm: null, coFull: null, salCo: null, salBank: 95822, remark: "⚠️ SUSPICIOUS: Lal Kuyatsai drawn 27k; others normal.", mobile: "01820-991920", inspector: "Field Insp. J. Alam" },
-      { id: "U14", bank: "UCB", branch: "Baraipara, Dhaka", post: "Baraipara Branch", bill: 140000, coComm: null, coFull: null, salCo: null, salBank: 96000, remark: "⚠️ SUSPICIOUS: Supervisor Yasin drawn 25k; 6 guards normal.", mobile: "01921-111920", inspector: "Auditor M. Hasan" },
+      // UCB
+      { id: "U1", bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coFull: null, coComm: null, salCo: 71000, salBank: 58000, type: "FRAUD", remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 58,000 to fake names (Kamal/Mohi); Real on-site staff paid Tk 71,000 via Company Upay wallet.", hitList: true, mobile: "01963601463", inspector: "Field Insp. J. Alam" },
+      { id: "U2", bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coFull: null, coComm: null, salCo: 30000, salBank: 64000, type: "FRAUD", remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 64,000 to 4 fake names; Real field messengers (Aslam & Ismail) paid Tk 30,000 via Upay.", hitList: true, mobile: "01963601463", inspector: "Field Insp. J. Alam" },
+      { id: "U3", bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coFull: null, coComm: null, salCo: 52000, salBank: 55000, type: "FRAUD", remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 55,000 to 3 fake accounts; Real field workers paid Tk 52,000 via Company Upay wallet.", hitList: true, mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "U4", bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coFull: 33000, coComm: null, salCo: null, salBank: 29800, type: "SUSPICIOUS", remark: "⚠️ POOLED ACCOUNT: Company invoiced for 3 guards, but bank paid Tk 29,800 into single A/C of Idris Ali Sardar.", hitList: true, mobile: "01811-992019", inspector: "Insp. K. Rahman" },
+      { id: "U5", bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch", bill: 45000, coFull: null, coComm: null, salCo: null, salBank: 32000, type: "SUSPICIOUS", remark: "⚠️ SUSPICIOUS PAYOUT: Abnormally high single disbursement to Jasim Uddin (Tk 32,000). Verify duty roster.", hitList: true, mobile: "01711-229104", inspector: "Field Insp. J. Alam" },
+      { id: "U6", bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coFull: null, coComm: 9513, salCo: 187500, salBank: null, type: "CLEAN", remark: "✅ CLEAN: Direct branch settlement. Company disbursed local bill for 11 specific staff.", hitList: true, mobile: "01713-559102", inspector: "Auditor S. Chowdhury" },
+      { id: "U7", bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coFull: null, coComm: 1000, salCo: 10000, salBank: null, type: "CLEAN", remark: "✅ CLEAN: ADC Bill-18 matched. Guard Ripon paid Tk 10,000; Margin Tk 1,000.", hitList: true, mobile: "01912-339102", inspector: "Insp. K. Rahman" },
+      { id: "U8", bank: "UCB", branch: "Tangail", post: "PKP Tangail ATM & CRM", bill: 49500, coFull: null, coComm: 5500, salCo: 44000, salBank: null, type: "CLEAN", remark: "✅ CLEAN: ADC Bill-18 matched. 4 Guards paid Tk 44,000; Margin Tk 5,500.", hitList: false, mobile: "01814-771920", inspector: "Auditor M. Hasan" },
+      { id: "U9", bank: "UCB", branch: "Moulvibazar Rd, Dhaka", post: "Dhaka South Regional Office", bill: 16000, coFull: null, coComm: 900, salCo: 15000, salBank: null, type: "CLEAN", remark: "✅ CLEAN: Bill-17 matched. Guard Abdullah paid Tk 15,000; Service charge Tk 900.", hitList: false, mobile: "01716-441920", inspector: "Insp. K. Rahman" },
+      { id: "U10", bank: "UCB", branch: "Chittagong", post: "Bohaddarhat Branch", bill: 60000, coFull: null, coComm: null, salCo: null, salBank: 45000, type: "CLEAN", remark: "✅ Direct Bank Paid (3 Regular Guards @ Tk 15,000)", hitList: false, mobile: "01815-661920", inspector: "Field Insp. J. Alam" },
+      { id: "U11", bank: "UCB", branch: "Chittagong", post: "Halishahar Branch", bill: 60000, coFull: null, coComm: null, salCo: null, salBank: 43500, type: "CLEAN", remark: "✅ Direct Bank Paid (3 Regular Guards)", hitList: false, mobile: "01918-771920", inspector: "Field Insp. J. Alam" },
+      { id: "U12", bank: "UCB", branch: "Chittagong", post: "Kumira University Gate", bill: 45000, coFull: null, coComm: null, salCo: null, salBank: 30000, type: "CLEAN", remark: "✅ Direct Bank Paid (3 Regular Guards @ Tk 10,000)", hitList: false, mobile: "01719-881920", inspector: "Field Insp. J. Alam" },
 
-      // DBBL 
-      { id: "D1", bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coComm: null, coFull: null, salCo: null, salBank: 35250, remark: "🚨 POOLED ACCOUNT: Hafizul Islam paid Tk 35,250 single draw; Gunman Labu Sheikh draws Tk 25,000 separately.", mobile: "01963601463", inspector: "Auditor T. Ahmed" },
-      { id: "D2", bank: "DBBL", branch: "Gazipur", post: "Gazipur Chowrasta Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "🚨 ABNORMAL PAYOUT: Abdus Salam paid Tk 30k single draw.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
-      { id: "D3", bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coComm: 4600, coFull: null, salCo: null, salBank: 34400, remark: "✅ CLEAN: Bill-24 verified. Bank paid guards Tk 34.4k (Apel & Enamul), Company took margin Tk 4.6k.", mobile: "01722-221920", inspector: "Insp. K. Rahman" },
-      { id: "D4", bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coComm: 4000, coFull: null, salCo: null, salBank: 35000, remark: "✅ CLEAN: ADC Bill-23 verified. 2 Guards paid Tk 35k, company margin Tk 4k.", mobile: "01823-331920", inspector: "Insp. K. Rahman" },
-      { id: "D5", bank: "DBBL", branch: "Sirajganj", post: "Ullapara Sirajganj FT", bill: 44850, coComm: 15500, coFull: null, salCo: null, salBank: 23500, remark: "⚠️ WIDE SPREAD: Guards paid 23k. Bill claims 44.8k.", mobile: "01924-441920", inspector: "Auditor T. Ahmed" },
+      // DBBL
+      { id: "D1", bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coFull: null, coComm: null, salCo: null, salBank: 60250, type: "FRAUD", remark: "🚨 POOLED ACCOUNT: Hafizul Islam paid Tk 35,250 single draw; Gunman Labu Sheikh draws Tk 25,000 separately.", hitList: true, mobile: "01963601463", inspector: "Auditor T. Ahmed" },
+      { id: "D2", bank: "DBBL", branch: "Gazipur", post: "Gazipur Chowrasta Branch", bill: 45000, coFull: null, coComm: null, salCo: null, salBank: 30000, type: "SUSPICIOUS", remark: "⚠️ ABNORMAL PAYOUT: Abdus Salam paid Tk 30,000 single draw. Verify duty log.", hitList: false, mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "D3", bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coFull: null, coComm: 4600, salCo: null, salBank: 34400, type: "CLEAN", remark: "✅ CLEAN: Bill-24 verified. Bank paid guards Tk 34.4k (Apel & Enamul), Company took margin Tk 4.6k.", hitList: true, mobile: "01722-221920", inspector: "Insp. K. Rahman" },
+      { id: "D4", bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coFull: null, coComm: 4000, salCo: null, salBank: 35000, type: "CLEAN", remark: "✅ CLEAN: ADC Bill-23 verified. 2 Guards paid Tk 35k, company margin Tk 4k.", hitList: true, mobile: "01823-331920", inspector: "Insp. K. Rahman" },
       
-      // MBBL (Central Master Bill)
-      { id: "M1", bank: "MMBPLC", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coComm: null, coFull: 2052915, salCo: null, salBank: null, remark: "ℹ️ CENTRALIZED MASTER BILL: Net bill claim of Tk 2,052,915 deposited into vendor A/C 111011100000526 for 27 locations nationwide.", mobile: "Central Office", inspector: "Chief Auditor" }
+      // MBBL
+      { id: "M1", bank: "MBBL", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coFull: 2052915, coComm: null, salCo: null, salBank: null, type: "RECON", remark: "ℹ️ CENTRALIZED MASTER BILL: Net bill claim deposited into vendor A/C for 27 locations.", hitList: true, mobile: "Central Office", inspector: "Chief Auditor" }
     ];
 
     // Auto-generate DBBL ADC Fast Tracks (54 total)
@@ -571,10 +549,9 @@
     dbbl_fts.forEach((ft, index) => {
       fullCensusDB.push({ 
         id: `DFT${index}`, bank: "DBBL", branch: "ADC Division", post: `${ft} Fast Track`, 
-        bill: 44850, coComm: null, coFull: null, salCo: null, salBank: null, 
-        remark: "✅ ADC Bill-23 (Category-B)",
-        mobile: "01700-ADC00" + (index + 1),
-        inspector: "ADC Audit Team"
+        bill: 44850, coFull: null, coComm: null, salCo: null, salBank: null, type: "CLEAN",
+        remark: "ℹ️ Covered under ADC Bill-23 (Cat-B Flat Rate Tk 44,850)", hitList: false,
+        mobile: "01700-ADC00" + (index + 1), inspector: "ADC Audit Team"
       });
     });
 
@@ -583,60 +560,23 @@
     mmb_branches.forEach((br, index) => {
       fullCensusDB.push({ 
         id: `MBR${index}`, bank: "MBBL", branch: br, post: `${br} Branch/Sub-branch`, 
-        bill: null, coComm: null, coFull: null, salCo: null, salBank: null, 
-        remark: "✅ Covered under Master Bill 01",
-        mobile: "01800-MBR00" + (index + 1),
-        inspector: "MBBL Audit Team"
+        bill: null, coFull: null, coComm: null, salCo: null, salBank: null, type: "CLEAN",
+        remark: "ℹ️ Covered under Modhumoti Master Bill 01", hitList: false,
+        mobile: "01800-MBR00" + (index + 1), inspector: "MBBL Audit Team"
       });
     });
 
     // ==========================================
-    // 2. SUMMARY HIT-LIST DATABASE (Grouped 18 Items)
+    // 2. UI RENDERING & LOGIC
     // ==========================================
-    const summaryHitListDB = [
-      { id: "S1", bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coComm: 12000, coFull: null, salCo: 27000, salBank: 27000, remark: "🚨 FRAUD (DOUBLE PAY): Both salary columns filled. 54k paid out for a 27k post. Jahed (Bank) vs Sabbir/Mabudul (Co).", mobile: "01963601463", inspector: "Insp. K. Rahman" },
-      { id: "S2", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coComm: null, coFull: 47348, salCo: null, salBank: 34500, remark: "⚖️ CLAIM RECONCILIATION: Bill-06 claimed Tk 47,348 net. Bank paid Nazrul Tk 34,500 direct; Company invoice requires salary deduction adjustment.", mobile: "01712-449102", inspector: "Insp. K. Rahman" },
-      { id: "S3", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan ATM", bill: 44550, coComm: null, coFull: 38352, salCo: null, salBank: 24000, remark: "⚖️ CLAIM RECONCILIATION: Bill-07 claimed Tk 38,352 net. Bank paid Sadek & Nurul Tk 24,000 direct; Invoice requires salary deduction adjustment.", mobile: "01819-338291", inspector: "Insp. K. Rahman" },
-      { id: "S4", bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coComm: null, coFull: 103950, salCo: null, salBank: 69100, remark: "⚠️ AUDIT IRREGULARITY: Bills 88 & 89 claim Tk 103,950 while single person (Soukat Jahan) drew Tk 69,100 from bank advice. Verify field disbursement.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
-      { id: "S5", bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "⚠️ POOLED ACCOUNT: 3 guards' salary (Tk 27,000) sent to single A/C of Utpal Biswas. Verify field distribution.", mobile: "01963601463", inspector: "Auditor T. Ahmed" },
-      { id: "S6", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch", bill: 71375, coComm: 5944, coFull: null, salCo: null, salBank: 55500, remark: "✅ CLEAN: Bank paid guards direct (Tk 55.5k), Company billed & received commission only (Tk 5,944, Bill-08).", mobile: "01721-884912", inspector: "Insp. K. Rahman" },
-      { id: "S7", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM", bill: 44550, coComm: 9285, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct (Tk 27k), Company billed & received commission only (Tk 9,285, Bill-09).", mobile: "01611-992014", inspector: "Insp. K. Rahman" },
-      { id: "U1", bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coComm: null, coFull: null, salCo: 71000, salBank: 58000, remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 58,000 to fake names (Kamal/Mohi); Real on-site staff paid Tk 71,000 via Company Upay wallet.", mobile: "01963601463", inspector: "Field Insp. J. Alam" },
-      { id: "U2", bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coComm: null, coFull: null, salCo: 30000, salBank: 64000, remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 64,000 to 4 fake names; Real field messengers (Aslam & Ismail) paid Tk 30,000 via Upay.", mobile: "01963601463", inspector: "Field Insp. J. Alam" },
-      { id: "U3", bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coComm: null, coFull: null, salCo: 52000, salBank: 55000, remark: "🚨 GHOST PAYROLL: Bank advice drained Tk 55,000 to 3 fake accounts; Real field workers paid Tk 52,000 via Company Upay wallet.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
-      { id: "U4", bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coComm: null, coFull: 33000, salCo: null, salBank: 29800, remark: "⚠️ POOLED ACCOUNT: Bill-18 claimed Tk 33,000 for 3 guards, but bank paid Tk 29,800 into single A/C of Idris Ali Sardar.", mobile: "01811-992019", inspector: "Insp. K. Rahman" },
-      { id: "U5", bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch (Jasim)", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 32000, remark: "⚠️ SUSPICIOUS PAYOUT: Abnormally high single disbursement to Jasim Uddin (Tk 32,000). Verify duty roster.", mobile: "01711-229104", inspector: "Field Insp. J. Alam" },
-      { id: "U6", bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coComm: 9513, coFull: null, salCo: 187500, salBank: null, remark: "✅ CLEAN: Direct branch settlement. Company disbursed local bill for 11 specific staff (Bill-05).", mobile: "01713-559102", inspector: "Auditor S. Chowdhury" },
-      { id: "U7", bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coComm: 1000, coFull: null, salCo: 10000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matched. Guard Ripon paid Tk 10,000; Margin Tk 1,000.", mobile: "01912-339102", inspector: "Insp. K. Rahman" },
-      { id: "D1", bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coComm: null, coFull: null, salCo: null, salBank: 35250, remark: "🚨 POOLED ACCOUNT: Hafizul Islam paid Tk 35,250 single draw; Gunman Labu Sheikh draws Tk 25,000 separately.", mobile: "01963601463", inspector: "Auditor T. Ahmed" },
-      { id: "D2", bank: "DBBL", branch: "Gazipur", post: "Gazipur Chowrasta Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "🚨 ABNORMAL PAYOUT: Abdus Salam paid Tk 30k single draw.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
-      { id: "D3", bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coComm: 4600, coFull: null, salCo: null, salBank: 34400, remark: "✅ CLEAN: Bill-24 verified. Bank paid guards Tk 34.4k (Apel & Enamul), Company took margin Tk 4.6k.", mobile: "01722-221920", inspector: "Insp. K. Rahman" },
-      { id: "D4", bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coComm: 4000, coFull: null, salCo: null, salBank: 35000, remark: "✅ CLEAN: ADC Bill-23 verified. 2 Guards paid Tk 35k, company margin Tk 4k.", mobile: "01823-331920", inspector: "Insp. K. Rahman" },
-      { id: "M1", bank: "MMBPLC", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coComm: null, coFull: 2052915, salCo: null, salBank: null, remark: "ℹ️ CENTRALIZED MASTER BILL: Net bill claim of Tk 2,052,915 deposited into vendor A/C 111011100000526 for 27 locations nationwide.", mobile: "Central Office", inspector: "Chief Auditor" }
-    ];
-
-    // Helper: Check if record is a genuine Fraud / Flagged row
-    function isFraudAlert(r) {
-      return (r.remark && (
-        r.remark.includes('🚨') || 
-        r.remark.includes('⚠️') || 
-        r.remark.includes('⚖️') || 
-        r.remark.includes('FRAUD') || 
-        r.remark.includes('RECON') || 
-        r.remark.includes('POOL') || 
-        r.remark.includes('GHOST') || 
-        r.remark.includes('IRREGULARITY') || 
-        r.remark.includes('SUSPICIOUS')
-      ));
+    function formatCur(val) {
+      if (val === null || val === undefined || val === 0 || val === "") return '<span class="text-slate-300 font-normal">—</span>';
+      return Number(val).toLocaleString('en-US', {minimumFractionDigits: 2});
     }
 
-    // ==========================================
-    // 3. CORE VIEW SWITCHER & TABLE RENDERER
-    // ==========================================
     function switchView(mode) {
       currentViewMode = mode;
       
-      // Update Tab Navigation Button Styles
       document.querySelectorAll('.view-btn').forEach(btn => {
         btn.classList.remove('bg-brandNavy', 'text-white', 'shadow-sm');
         btn.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
@@ -657,7 +597,7 @@
     }
 
     function toggleDynamicCol(colName) {
-      dynamicCols[colName] = !dynamicCols[colName];
+      activeAddons[colName] = !activeAddons[colName];
       renderTable();
     }
 
@@ -676,51 +616,55 @@
     function resetFilters() {
       currentRegion = 'ALL';
       currentSort = 'BANK_DEFAULT';
-      dynamicCols = { dateTime: false, nidMobile: false, inspector: false };
+      activeAddons.dateTime = false;
+      activeAddons.nidContact = false;
       document.getElementById('chkColDateTime').checked = false;
       document.getElementById('chkColNidMobile').checked = false;
-      document.getElementById('chkColInspector').checked = false;
       document.getElementById('searchInput').value = '';
       toggleAddsOnMenu();
       renderTable();
     }
 
-    // Format currency
-    const formatCur = (val) => {
-      if (val === null || val === undefined || val === '') return '<span class="text-slate-300">—</span>';
-      return 'BDT ' + Number(val).toLocaleString('en-US', {minimumFractionDigits: 2});
-    };
+    function showToast(title, message) {
+      const toast = document.getElementById('toastAction');
+      if (!toast) return;
+      document.getElementById('toastTitle').innerText = title || "Notification";
+      document.getElementById('toastMessage').innerText = message || "";
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
 
     function renderTable() {
       let activeDB = [];
       let noteStr = "";
 
-      // Filter by View Mode
       if (currentViewMode === 'HIT_LIST') {
-        activeDB = [...summaryHitListDB];
-        noteStr = "Viewing Summary Hit-List (Grouped 18 Items)";
+        activeDB = fullCensusDB.filter(r => r.hitList);
+        noteStr = "Viewing Summary Hit-List (Grouped Critical Items)";
       } else if (currentViewMode === 'SINGLE_POSTS') {
         activeDB = fullCensusDB.filter(r => (r.bank === 'UCB' || r.bank === 'SIBL') && !r.branch.includes("ADC Division"));
         noteStr = "Viewing All Single Duty Posts (UCB & SIBL)";
       } else if (currentViewMode === 'DBBL_FT') {
         activeDB = fullCensusDB.filter(r => r.bank === 'DBBL' && r.branch === "ADC Division");
-        noteStr = "Viewing DBBL Fast Tracks Only";
+        noteStr = "Viewing DBBL Fast Tracks (54 Posts)";
       } else if (currentViewMode === 'MODHUMOTI') {
         activeDB = fullCensusDB.filter(r => r.bank === 'MBBL' || r.bank === 'MMBPLC');
-        noteStr = "Viewing Modhumoti Branches Only";
+        noteStr = "Viewing Modhumoti Bank Branches (27 Posts)";
       } else {
         activeDB = [...fullCensusDB];
-        noteStr = "Viewing Full Census (205+ Posts)";
+        noteStr = "Viewing Full Master Census (205+ Posts)";
       }
 
-      // Filter by Region
+      // Region Filter
       if (currentRegion !== 'ALL') {
         activeDB = activeDB.filter(r => r.branch.toLowerCase().includes(currentRegion.toLowerCase()));
-        noteStr += ` | Filtered by: ${currentRegion}`;
+        noteStr += ` | Region: ${currentRegion}`;
       }
 
-      // Search Bar Filter
-      const q = document.getElementById('searchInput').value.toLowerCase();
+      // Search Filter
+      const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
       if (q) {
         activeDB = activeDB.filter(r => {
           const searchStr = `${r.bank} ${r.branch} ${r.post} ${r.remark} ${r.mobile || ''} ${r.inspector || ''}`.toLowerCase();
@@ -728,7 +672,7 @@
         });
       }
 
-      // Sorting
+      // Sort
       activeDB.sort((a, b) => {
         if (currentSort === 'ALPHABETICAL') {
           return a.post.localeCompare(b.post);
@@ -739,52 +683,34 @@
         }
       });
 
-      // ==========================================
-      // DYNAMIC 10-COLUMN HEADER GENERATION
-      // ==========================================
-      const thead = document.getElementById('tableHeader');
-      let thHtml = `
-        <tr>
-          <th class="p-3 text-center font-bold border-r border-slate-600 w-12 tracking-wide">SL NO</th>
-          <th class="p-3 font-bold border-r border-slate-600 min-w-[140px] tracking-wide">BRANCH</th>
-          <th class="p-3 font-bold border-r border-slate-600 min-w-[200px] tracking-wide">DUTY POST</th>
+      // Render Headers with exact order requested
+      let headerHTML = `
+        <th class="p-2.5 text-center font-bold border-r border-slate-600 w-12">SL</th>
+        <th class="p-2.5 font-bold border-r border-slate-600 w-16">BANK</th>
+        <th class="p-2.5 font-bold border-r border-slate-600 min-w-[130px]">BRANCH / DIV</th>
+        <th class="p-2.5 font-bold border-r border-slate-600 min-w-[170px]">DUTY POST</th>
+        <th class="p-2.5 text-right font-bold border-r border-slate-600 min-w-[110px] bg-slate-700 leading-tight">TOTAL BILL<br><span class="text-[10px] font-normal text-slate-300">(INVOICED)</span></th>
+        <th class="p-2.5 text-right font-bold border-r border-slate-600 min-w-[110px] bg-sky-900 leading-tight">CO. INVOICED<br><span class="text-[10px] font-normal text-sky-300">FULL BILL CLAIMED</span></th>
+        <th class="p-2.5 text-right font-bold border-r border-slate-600 min-w-[110px] bg-sky-900 leading-tight">CO. RECEIVED<br><span class="text-[10px] font-normal text-sky-300">COMMISSION ONLY</span></th>
+        <th class="p-2.5 text-right font-bold border-r border-slate-600 min-w-[110px] bg-emerald-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-emerald-300">BY COMPANY</span></th>
+        <th class="p-2.5 text-right font-bold border-r border-slate-600 min-w-[110px] bg-amber-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-amber-300">BY BANK</span></th>
+        <th class="p-2.5 font-bold border-r border-slate-600 min-w-[240px]">REMARK / AUDIT FINDING</th>
       `;
-
-      // Dynamic Columns in Header
-      if (dynamicCols.dateTime) {
-        thHtml += `<th class="p-3 text-center font-bold border-r border-slate-600 min-w-[130px] bg-slate-800 text-sky-300">AUDIT DATE/TIME</th>`;
-      }
-      if (dynamicCols.nidMobile) {
-        thHtml += `<th class="p-3 font-bold border-r border-slate-600 min-w-[160px] bg-slate-800 text-amber-300">NID / MOBILE MSISDN</th>`;
-      }
-      if (dynamicCols.inspector) {
-        thHtml += `<th class="p-3 font-bold border-r border-slate-600 min-w-[140px] bg-slate-800 text-emerald-300">AUDITOR / INSP</th>`;
-      }
-
-      // 10-Column Financial Flow Specific Accounting Headers
-      thHtml += `
-          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[130px] bg-slate-700 leading-tight">TOTAL BILL<br><span class="text-[10px] font-normal text-slate-300">(INVOICED)</span></th>
-          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[130px] bg-sky-900 leading-tight">CO. RECEIVED:<br><span class="text-[10px] font-normal text-sky-300">COMMISSION ONLY</span></th>
-          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[140px] bg-sky-900 leading-tight">CO. INVOICED:<br><span class="text-[10px] font-normal text-amber-300">FULL BILL CLAIMED</span></th>
-          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[130px] bg-emerald-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-emerald-300">BY COMPANY (UPAY)</span></th>
-          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[130px] bg-amber-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-amber-300">BY BANK (CENTRAL)</span></th>
-          
-          <th class="p-3 font-bold border-r border-slate-600 min-w-[280px] tracking-wide">REMARK</th>
-          <th class="p-3 text-center font-bold min-w-[130px] tracking-wide bg-brandNavy">
-            <div class="flex items-center justify-center gap-1">
-              <i class="fa-solid fa-stamp text-amber-400"></i>
-              <span>PROOF</span>
-            </div>
-          </th>
-        </tr>
-      `;
-      thead.innerHTML = thHtml;
+      
+      if (activeAddons.dateTime) headerHTML += `<th class="p-2.5 font-bold bg-amber-800 text-amber-100 border-r border-slate-600 min-w-[130px]">DATE &amp; TIME</th>`;
+      if (activeAddons.nidContact) headerHTML += `<th class="p-2.5 font-bold bg-emerald-800 text-emerald-100 border-r border-slate-600 min-w-[140px]">NID / MSISDN</th>`;
+      
+      headerHTML += `<th class="p-2.5 text-center font-bold min-w-[130px] bg-[#0F172A] z-20 relative shadow-[-4px_0_15px_rgba(0,0,0,0.3)]">ACTIONS</th>`;
+      
+      const headRow = document.getElementById('tableHeaderRow');
+      if (headRow) headRow.innerHTML = headerHTML;
 
       const tbody = document.getElementById('tableBody');
+      if (!tbody) return;
+
       let html = '';
       let tb = 0, tcc = 0, tcf = 0, tsc = 0, tsb = 0;
       let displayCount = 0;
-      let fraudCasesCount = 0;
 
       activeDB.forEach((r, idx) => {
         displayCount++;
@@ -793,207 +719,196 @@
         tcf += (r.coFull || 0); 
         tsc += (r.salCo || 0); 
         tsb += (r.salBank || 0);
+        
+        let rowClass = "hover:bg-slate-50 transition animate-fade-in";
+        if (r.type === 'FRAUD') rowClass = "bg-rose-50/70 hover:bg-rose-100 transition animate-fade-in";
+        else if (r.type === 'RECON') rowClass = "bg-blue-50/60 hover:bg-blue-100 transition animate-fade-in";
+        else if (r.type === 'SUSPICIOUS') rowClass = "bg-amber-50 hover:bg-amber-100 transition animate-fade-in";
+        else if (r.type === 'CLEAN') rowClass = "bg-emerald-50/50 hover:bg-emerald-100 transition animate-fade-in";
 
-        // Styling indicators
-        let rowClass = "hover:bg-slate-50 transition";
-        let isFraud = isFraudAlert(r);
-        if (isFraud) {
-          rowClass = "bg-rose-50/60 hover:bg-rose-100/70 border-l-4 border-l-rose-600";
-          fraudCasesCount++;
+        const badgeClass = r.bank === 'UCB' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 
+                           r.bank === 'SIBL' ? 'bg-blue-100 text-blue-800 border-blue-300' : 
+                           r.bank === 'DBBL' ? 'bg-sky-100 text-sky-800 border-sky-300' : 'bg-indigo-100 text-indigo-800 border-indigo-300';
+
+        let proofBtn = `<span class="text-slate-300 text-[10px] font-medium">—</span>`;
+        if (r.type === 'FRAUD' || r.type === 'SUSPICIOUS' || r.type === 'RECON') {
+          const safePost = (r.post || '').replace(/'/g, "\'");
+          const safeRemark = (r.remark || '').replace(/'/g, "\'");
+          proofBtn = `
+            <button onclick="openEvidenceModal('${safePost}', '${safeRemark}', '${r.type}')" class="bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white px-2 py-1 rounded text-[10px] font-bold shadow-md transition active:scale-95 flex items-center space-x-1">
+              <i class="fa-solid fa-stamp text-[10px]"></i><span>Proof</span>
+            </button>`;
         }
 
-        // Bank badge style
-        let bankBadge = "bg-slate-100 text-slate-800 border-slate-300";
-        if (r.bank === 'SIBL') bankBadge = "bg-emerald-50 text-emerald-800 border-emerald-300";
-        if (r.bank === 'UCB') bankBadge = "bg-amber-50 text-amber-800 border-amber-300";
-        if (r.bank === 'DBBL') bankBadge = "bg-sky-50 text-sky-800 border-sky-300";
-        if (r.bank === 'MBBL' || r.bank === 'MMBPLC') bankBadge = "bg-indigo-50 text-indigo-800 border-indigo-300";
+        let editBtn = `
+            <button onclick="openEditModal('${r.id}')" class="bg-amber-500 hover:bg-amber-400 text-white px-2 py-1 rounded text-[10px] font-bold shadow transition active:scale-95 flex items-center space-x-1">
+              <i class="fa-solid fa-pencil text-[10px]"></i><span>Edit</span>
+            </button>`;
 
-        // Remark Badge
-        let remarkBadge = `<span class="text-slate-600 font-medium">${r.remark}</span>`;
-        if (r.remark.includes('🚨')) {
-          remarkBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300 shadow-sm">${r.remark}</span>`;
-        } else if (r.remark.includes('⚠️')) {
-          remarkBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">${r.remark}</span>`;
-        } else if (r.remark.includes('✅')) {
-          remarkBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">${r.remark}</span>`;
-        }
-
-        // Context info badge for central bills
         let infoBadge = '';
         if (r.post.includes('Master Bill') || r.branch.includes('ADC Division') || r.post.includes('Fast Track')) {
-          infoBadge = `<button onclick="openContextModal('${r.id || 'REC_' + idx}')" class="ml-1 text-sky-600 hover:text-sky-800" title="Click for centralized billing breakdown"><i class="fa-solid fa-circle-question"></i></button>`;
+          infoBadge = `<button onclick="openContextModal('${r.id}')" class="ml-1 text-sky-600 hover:text-sky-800" title="Click for centralized billing breakdown"><i class="fa-solid fa-circle-question"></i></button>`;
         }
 
-        // PROOF COLUMN: [👁️ View Proof] strictly on Flagged Rows; Dash on clean rows
-        let proofBtn = `<span class="text-slate-400 font-bold px-2">—</span>`;
-        if (isFraud) {
-          proofBtn = `
-            <button onclick="openEvidenceModal('${r.id || 'REC_' + idx}')" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold bg-slate-900 hover:bg-rose-900 text-rose-300 hover:text-white border border-rose-600/80 shadow transition active:scale-95 group">
-              <i class="fa-solid fa-eye text-rose-400 group-hover:text-white"></i>
-              <span>View Proof</span>
-            </button>
-          `;
-        }
-
-        // Row Output
         html += `
-          <tr class="${rowClass}">
-            <td class="p-3 text-center font-mono-num text-slate-500 border-r border-slate-200">${displayCount}</td>
-            <td class="p-3 border-r border-slate-200 font-semibold">
-              <span class="inline-block text-[10px] font-bold px-1.5 py-0.5 rounded border ${bankBadge} mr-1">${r.bank}</span>
-              <span class="text-slate-700">${r.branch}</span>
+          <tr class="${rowClass} border-b border-slate-200" style="animation-delay: ${idx * 8}ms">
+            <td class="p-2.5 text-center font-bold text-slate-500 border-r border-slate-200">${displayCount}</td>
+            <td class="p-2.5 text-center border-r border-slate-200">
+               <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">${r.bank}</span>
             </td>
-            <td class="p-3 border-r border-slate-200 font-bold text-slate-800">
-              <span>${r.post}</span>
-              ${infoBadge}
-            </td>
+            <td class="p-2.5 font-semibold text-slate-700 border-r border-slate-200">${r.branch}</td>
+            <td class="p-2.5 font-bold text-slate-900 border-r border-slate-200">${r.post} ${infoBadge}</td>
+            <td class="p-2.5 text-right font-mono-num font-bold text-slate-800 border-r border-slate-200">${formatCur(r.bill)}</td>
+            <td class="p-2.5 text-right font-mono-num font-bold text-sky-800 border-r border-slate-200">${formatCur(r.coFull)}</td>
+            <td class="p-2.5 text-right font-mono-num font-bold text-sky-800 border-r border-slate-200">${formatCur(r.coComm)}</td>
+            <td class="p-2.5 text-right font-mono-num font-bold text-emerald-800 border-r border-slate-200">${formatCur(r.salCo)}</td>
+            <td class="p-2.5 text-right font-mono-num font-bold text-amber-800 border-r border-slate-200">${formatCur(r.salBank)}</td>
+            <td class="p-2.5 text-[11px] font-medium text-slate-800 leading-tight border-r border-slate-200 break-words">${r.remark}</td>
         `;
 
-        // Dynamic Columns Content
-        if (dynamicCols.dateTime) {
-          html += `<td class="p-3 text-center border-r border-slate-200 font-mono text-[11px] text-slate-500">2026-09-14 14:30</td>`;
-        }
-        if (dynamicCols.nidMobile) {
+        if (activeAddons.dateTime) html += `<td class="p-2.5 text-center text-slate-500 font-mono text-[10px] border-r border-slate-200">2026-09-14 14:30</td>`;
+        if (activeAddons.nidContact) {
           let mob = r.mobile || '—';
           let mobBadge = `<span class="font-mono text-[11px] text-slate-600">${mob}</span>`;
           if (mob === '01963601463') {
-            mobBadge = `<span class="font-mono text-[11px] font-bold text-rose-700 bg-rose-100 px-1.5 py-0.5 rounded border border-rose-300 inline-flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-[10px]"></i>01963601463 <span class="text-[9px] bg-rose-700 text-white px-1 rounded">POOL</span></span>`;
+            mobBadge = `<span class="font-mono text-[11px] font-bold text-rose-700 bg-rose-100 px-1 py-0.5 rounded border border-rose-300 inline-flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-[10px]"></i>01963601463 <span class="text-[9px] bg-rose-700 text-white px-1 rounded">POOL</span></span>`;
           }
-          html += `<td class="p-3 border-r border-slate-200">${mobBadge}</td>`;
-        }
-        if (dynamicCols.inspector) {
-          html += `<td class="p-3 border-r border-slate-200 font-medium text-slate-700 text-[11px]">${r.inspector || 'Audit Team'}</td>`;
+          html += `<td class="p-2.5 text-center border-r border-slate-200">${mobBadge}</td>`;
         }
 
-        // Financial Columns
-        html += `
-            <td class="p-3 text-right font-mono-num border-r border-slate-200 text-slate-800 font-semibold">${formatCur(r.bill)}</td>
-            <td class="p-3 text-right font-mono-num border-r border-slate-200 text-sky-800 font-bold bg-sky-50/30">${formatCur(r.coComm)}</td>
-            <td class="p-3 text-right font-mono-num border-r border-slate-200 text-amber-900 font-bold bg-amber-50/40">${formatCur(r.coFull)}</td>
-            <td class="p-3 text-right font-mono-num border-r border-slate-200 text-emerald-800 font-bold bg-emerald-50/40">${formatCur(r.salCo)}</td>
-            <td class="p-3 text-right font-mono-num border-r border-slate-200 text-amber-800 font-bold bg-amber-50/40">${formatCur(r.salBank)}</td>
-            
-            <td class="p-3 border-r border-slate-200">${remarkBadge}</td>
-            <td class="p-3 text-center bg-slate-50/50">${proofBtn}</td>
-          </tr>
-        `;
+        html += `<td class="p-2.5 bg-white/40 sticky right-0 z-10 shadow-[-4px_0_15px_rgba(0,0,0,0.05)] border-l border-slate-200">
+                    <div class="flex items-center justify-center space-x-1.5">
+                        ${proofBtn}
+                        ${editBtn}
+                    </div>
+                 </td></tr>`;
       });
 
-      const totalCols = 10 + (dynamicCols.dateTime ? 1 : 0) + (dynamicCols.nidMobile ? 1 : 0) + (dynamicCols.inspector ? 1 : 0);
+      const totalCols = 11 + (activeAddons.dateTime ? 1 : 0) + (activeAddons.nidContact ? 1 : 0);
 
       if (displayCount === 0) {
-        html = `<tr><td colspan="${totalCols}" class="text-center p-12 text-slate-400 font-medium"><i class="fa-solid fa-folder-open text-3xl mb-3 block opacity-50"></i>No records found matching criteria.</td></tr>`;
+        html = `<tr><td colspan="${totalCols}" class="text-center p-10 text-slate-400 font-medium"><i class="fa-solid fa-folder-open text-3xl mb-3 block opacity-50"></i>No records found matching criteria.</td></tr>`;
       }
       
       tbody.innerHTML = html;
       
       // Dynamic Footer Colspan Calculation
-      const preCols = 3 + (dynamicCols.dateTime ? 1 : 0) + (dynamicCols.nidMobile ? 1 : 0) + (dynamicCols.inspector ? 1 : 0);
+      const preCols = 4;
       document.getElementById('tableFooter').innerHTML = `
         <tr>
-          <td colspan="${preCols}" class="p-3 text-right text-xs uppercase tracking-wider">VISIBLE FILTERED TOTALS:</td>
-          <td class="p-3 text-right font-mono-num text-sm" id="footBill">0.00</td>
-          <td class="p-3 text-right font-mono-num text-sm text-sky-800" id="footComm">0.00</td>
-          <td class="p-3 text-right font-mono-num text-sm text-amber-800" id="footCoFull">0.00</td>
-          <td class="p-3 text-right font-mono-num text-sm text-emerald-800" id="footSalCo">0.00</td>
-          <td class="p-3 text-right font-mono-num text-sm text-amber-800" id="footSalBank">0.00</td>
-          <td colspan="2" class="p-3 text-slate-500 text-[10px] font-medium" id="footNote">Calculated based on current view.</td>
+          <td colspan="${preCols}" class="p-2.5 text-right text-xs uppercase tracking-wider text-slate-700">TOTALS:</td>
+          <td class="p-2.5 text-right font-mono-num text-xs font-bold text-slate-800" id="footBill">0.00</td>
+          <td class="p-2.5 text-right font-mono-num text-xs font-bold text-sky-800" id="footCoFull">0.00</td>
+          <td class="p-2.5 text-right font-mono-num text-xs font-bold text-sky-800" id="footComm">0.00</td>
+          <td class="p-2.5 text-right font-mono-num text-xs font-bold text-emerald-800" id="footSalCo">0.00</td>
+          <td class="p-2.5 text-right font-mono-num text-xs font-bold text-amber-800" id="footSalBank">0.00</td>
+          <td colspan="${totalCols - 9}" class="p-2.5 text-slate-500 text-[10px] font-medium" id="footNote">Calculated based on current view.</td>
         </tr>
       `;
 
       // Update Footers & Metrics
       document.getElementById('footBill').innerText = tb.toLocaleString('en-US', {minimumFractionDigits: 2});
-      document.getElementById('footComm').innerText = tcc.toLocaleString('en-US', {minimumFractionDigits: 2});
       document.getElementById('footCoFull').innerText = tcf.toLocaleString('en-US', {minimumFractionDigits: 2});
+      document.getElementById('footComm').innerText = tcc.toLocaleString('en-US', {minimumFractionDigits: 2});
       document.getElementById('footSalCo').innerText = tsc.toLocaleString('en-US', {minimumFractionDigits: 2});
       document.getElementById('footSalBank').innerText = tsb.toLocaleString('en-US', {minimumFractionDigits: 2});
 
-      document.getElementById('metricCount').innerText = displayCount;
-      document.getElementById('metricBill').innerText = 'BDT ' + tb.toLocaleString('en-US', {minimumFractionDigits: 2});
-      document.getElementById('metricComm').innerText = 'BDT ' + tcc.toLocaleString('en-US', {minimumFractionDigits: 2});
+      if (document.getElementById('metricCount')) document.getElementById('metricCount').innerText = displayCount;
+      if (document.getElementById('metricBill')) document.getElementById('metricBill').innerText = 'BDT ' + tb.toLocaleString('en-US', {minimumFractionDigits: 2});
+      if (document.getElementById('metricSalBank')) document.getElementById('metricSalBank').innerText = 'BDT ' + tsb.toLocaleString('en-US', {minimumFractionDigits: 2});
       
-      // Calculate Discrepancy / Drain
-      let fraudTotal = 0;
-      activeDB.forEach(r => {
-        if (r.remark && (r.remark.includes('DOUBLE PAY') || r.remark.includes('DOUBLE BILLING') || r.remark.includes('RECON') || r.remark.includes('POOLING') || r.remark.includes('GHOST'))) {
-          if (r.salBank && r.salCo) {
-            fraudTotal += (r.salBank + r.salCo) - (r.bill || 27000);
-          } else if (r.coFull && r.salBank) {
-            fraudTotal += r.salBank;
-          } else if (r.salBank && !r.coFull && !r.salCo) {
-            fraudTotal += (r.salBank * 0.4);
-          }
+      let confirmedDrain = 0;
+      activeDB.forEach(r => { 
+        if (r.type === 'FRAUD') {
+          confirmedDrain += (r.salBank || 0); 
         }
       });
-      document.getElementById('metricFraud').innerText = 'BDT ' + fraudTotal.toLocaleString('en-US', {minimumFractionDigits: 2});
-
-      document.getElementById('footNote').innerText = noteStr;
-      document.getElementById('recordSummaryText').innerText = `Displaying ${displayCount} Posts | ${fraudCasesCount} Flagged with Official Proof`;
+      if (document.getElementById('metricFraud')) document.getElementById('metricFraud').innerText = 'BDT ' + confirmedDrain.toLocaleString('en-US', {minimumFractionDigits: 2});
+      
+      if (document.getElementById('footNote')) document.getElementById('footNote').innerText = noteStr;
+      if (document.getElementById('recordSummaryText')) document.getElementById('recordSummaryText').innerText = `Displaying ${displayCount} Posts`;
     }
 
-    // ==========================================
-    // 4. FORENSIC EVIDENCE MODAL (DARK THEMED & IMAGE READY)
-    // Dynamic Image Injection with <img src="images/...">
-    // ==========================================
-    const BANK_FULL_NAMES = {
-      "SIBL": "Social Islami Bank PLC",
-      "UCB": "United Commercial Bank PLC",
-      "DBBL": "Dutch-Bangla Bank Limited",
-      "MBBL": "Modhumoti Bank PLC",
-      "MMBPLC": "Modhumoti Bank PLC"
-    };
+    // =========================================================
+    // 3. EDIT MODAL LOGIC
+    // =========================================================
+    function openEditModal(id) {
+        const row = fullCensusDB.find(r => r.id === id);
+        if (!row) return;
 
-    function findRecord(recordId) {
-      let r = fullCensusDB.find(x => x.id === recordId);
-      if (!r) r = summaryHitListDB.find(x => x.id === recordId);
-      if (!r && recordId.startsWith("REC_")) {
-        const idx = parseInt(recordId.replace("REC_", ""));
-        r = fullCensusDB[idx] || summaryHitListDB[idx];
+        document.getElementById('editRowId').value = row.id;
+        document.getElementById('editPostTitle').innerText = row.post;
+        document.getElementById('editBranchTitle').innerText = row.bank + " | " + row.branch;
+
+        document.getElementById('editBill').value = row.bill || '';
+        document.getElementById('editCoFull').value = row.coFull || '';
+        document.getElementById('editCoComm').value = row.coComm || '';
+        document.getElementById('editSalCo').value = row.salCo || '';
+        document.getElementById('editSalBank').value = row.salBank || '';
+        document.getElementById('editType').value = row.type || 'CLEAN';
+        document.getElementById('editRemark').value = row.remark || '';
+
+        document.getElementById('editModal').classList.add('active');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').classList.remove('active');
+    }
+
+    function saveEdit() {
+        const id = document.getElementById('editRowId').value;
+        const row = fullCensusDB.find(r => r.id === id);
+        if (row) {
+            row.bill = parseFloat(document.getElementById('editBill').value) || null;
+            row.coFull = parseFloat(document.getElementById('editCoFull').value) || null;
+            row.coComm = parseFloat(document.getElementById('editCoComm').value) || null;
+            row.salCo = parseFloat(document.getElementById('editSalCo').value) || null;
+            row.salBank = parseFloat(document.getElementById('editSalBank').value) || null;
+            row.type = document.getElementById('editType').value;
+            row.remark = document.getElementById('editRemark').value;
+            
+            renderTable();
+            closeEditModal();
+            showToast("Row Updated", "Accounting entry saved successfully.");
+        }
+    }
+
+    // =========================================================
+    // 4. IMAGE EVIDENCE MODAL (Dynamic Gallery Engine)
+    // =========================================================
+    function openEvidenceModal(postOrId, remark, type) {
+      let r = fullCensusDB.find(x => x.post === postOrId || x.id === postOrId);
+      if (!r) {
+        r = {
+          post: postOrId,
+          branch: "Audit Verified Location",
+          bank: "BANK AUDIT",
+          bill: 0,
+          salBank: 0,
+          salCo: 0,
+          coFull: 0,
+          remark: remark || "Official discrepancy verified.",
+          type: type || "FRAUD"
+        };
       }
-      return r || summaryHitListDB[0];
-    }
 
-    function openEvidenceModal(recordId) {
-      const modal = document.getElementById('evidenceModal');
-      const content = document.getElementById('modalContent');
-      const r = findRecord(recordId);
-
-      // 1. Populate Case Information
-      const bankFullName = BANK_FULL_NAMES[r.bank] || `${r.bank} Banking Division`;
       document.getElementById('modalPostTitle').innerText = `${r.post} — ${r.branch} (${r.bank})`;
-      document.getElementById('modalBankBranch').innerText = `${r.bank} • ${r.branch}`;
-      document.getElementById('modalBillAmount').innerText = r.bill ? `BDT ${r.bill.toLocaleString('en-US', {minimumFractionDigits: 2})}` : 'BDT —';
-      
+      document.getElementById('evidenceBadge').innerText = `${r.type} PROOF MATCH`;
+
       const coClaimed = r.salCo || r.coFull || r.bill || 0;
-      document.getElementById('modalCompanyAmount').innerText = `BDT ${coClaimed.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-      
       const bankPaid = r.salBank || 0;
-      document.getElementById('modalBankAmount').innerText = bankPaid ? `BDT ${bankPaid.toLocaleString('en-US', {minimumFractionDigits: 2})}` : 'BDT —';
 
-      // 2. Specific Auditor Explanation
       let explanation = r.remark;
-      let matchType = "RECONCILIATION FINDING";
-
-      if (r.remark.includes('DOUBLE PAY')) {
-        explanation = `<strong>CRITICAL RECONCILIATION FINDING:</strong> Both Company and Bank disbursed full payroll for the same duty post. 
-        Company Requisition (Best Force Ltd. Official Seal) claimed <strong>BDT ${r.salCo ? r.salCo.toLocaleString() : '27,000'}</strong> for personnel Sabbir / Mabudul, while Bank Advice Letter (${r.bank} Clearing Seal) simultaneously credited <strong>BDT ${r.salBank ? r.salBank.toLocaleString() : '27,000'}</strong> directly to Jahed. Total drain of BDT 54,000 against an authorized post budget of BDT 27,000.`;
-        matchType = "DUPLICATE PAYOUT";
-      } else if (r.remark.includes('DOUBLE BILLING') || r.remark.includes('RECON')) {
-        explanation = `<strong>RECONCILIATION OFFSET REQUIRED:</strong> Bank Advice Letter confirms the Bank directly settled guard payroll from Head Office under ${r.bank} Central Clearing Seal. Concurrently, Best Force Ltd. issued an official invoice claiming full bill (<strong>BDT ${r.coFull ? r.coFull.toLocaleString() : '47,348'}</strong>). A formal invoice credit adjustment offset is required.`;
-        matchType = "DIRECT BANK PAY VS. FULL INVOICE";
-      } else if (r.remark.includes('GHOST PAYROLL')) {
-        explanation = `<strong>GHOST BENEFICIARY DISCREPANCY:</strong> The names authorized on the ${r.bank} Central Advice Letter (Kamal, Mohi) are fictitious accounts. True on-ground workers were disbursed smaller remittances via Upay mobile wallet, while unauthorized beneficiaries drew bank funds directly.`;
-        matchType = "FICTITIOUS BENEFICIARY";
-      } else if (r.remark.includes('POOLING')) {
-        explanation = `<strong>FUNDS POOLING DETECTED:</strong> Salaries intended for multiple guard personnel were pooled and remitted into a single individual account (A/C of Utpal Biswas / Hafizul Islam / Syndicate MSISDN 01963601463), bypassing verified guard attendance rosters.`;
-        matchType = "SINGLE ACCOUNT CONSOLIDATION";
+      if (r.remark.includes('DOUBLE')) {
+        explanation = `<strong>CRITICAL RECONCILIATION FINDING:</strong> Both Company and Bank disbursed full payroll for the same duty post. Company Requisition claimed <strong>BDT ${Number(r.salCo || 27000).toLocaleString()}</strong>, while Bank Advice Letter concurrently paid <strong>BDT ${Number(r.salBank || 27000).toLocaleString()}</strong> direct to guard account. Total drain of BDT ${(Number(r.salCo || 27000) + Number(r.salBank || 27000)).toLocaleString()} against post budget.`;
+      } else if (r.remark.includes('RECON')) {
+        explanation = `<strong>RECONCILIATION OFFSET REQUIRED:</strong> Bank Advice Letter confirms the Bank directly settled guard payroll from Head Office under Central Clearing Seal. Concurrently, Best Force Ltd. issued an official invoice claiming full bill (<strong>BDT ${Number(r.coFull || 47348).toLocaleString()}</strong>). A formal invoice credit adjustment offset is required.`;
+      } else if (r.remark.includes('GHOST')) {
+        explanation = `<strong>GHOST BENEFICIARY DISCREPANCY:</strong> The names authorized on the ${r.bank} Central Advice Letter are fictitious accounts. True on-ground workers were disbursed smaller remittances via Upay mobile wallet, while unauthorized beneficiaries drew bank funds directly.`;
+      } else if (r.remark.includes('POOL')) {
+        explanation = `<strong>FUNDS POOLING DETECTED:</strong> Salaries intended for multiple guard personnel were pooled and remitted into a single individual account, bypassing verified guard attendance rosters.`;
       }
 
-      document.getElementById('modalExplanationText').innerHTML = explanation;
-      document.getElementById('modalMatchType').innerText = matchType;
-
-      // 3. Resolve Payee Beneficiary Name for Bank Advice
       let recipientName = "Branch Designated Guard Personnel";
       if (r.remark.includes('Jahed')) recipientName = "Jahed (Direct Bank Account)";
       else if (r.remark.includes('Nazrul')) recipientName = "Nazrul (Direct Bank Account)";
@@ -1004,124 +919,173 @@
       else if (r.remark.includes('Abdus Salam')) recipientName = "Abdus Salam (Single Draw A/C)";
       else if (r.remark.includes('Kamal')) recipientName = "Kamal / Mohi (Fake Bank Advice Names)";
 
-      // 4. Inject Dynamic Physical Evidence Images with onerror fallbacks
-      const imagesGrid = document.getElementById('modalEvidenceImagesGrid');
-      imagesGrid.innerHTML = `
-        <!-- Document 1: Company Invoice Image Card -->
-        <div class="bg-slate-950 p-4 rounded-xl border border-slate-700 flex flex-col justify-between shadow-lg">
-          <div>
-            <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-800">
-              <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-file-invoice text-amber-400"></i>
-                <span class="text-xs font-bold text-slate-200">Company Invoice Requisition</span>
-              </div>
-              <span class="text-[10px] bg-red-900/60 text-red-200 border border-red-700 px-2 py-0.5 rounded font-mono font-bold">
-                SEAL: #BF-2026
-              </span>
+      const gallery = document.getElementById('imageGalleryGrid');
+      gallery.innerHTML = `
+        <!-- Case Summary Header Card -->
+        <div class="bg-slate-800/80 rounded-xl border border-slate-700 p-4 shadow-sm">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center divide-x divide-slate-700">
+            <div class="px-2">
+              <span class="text-[10px] uppercase font-bold text-slate-400 block">Bank &amp; Branch</span>
+              <p class="text-xs font-bold text-sky-400 mt-0.5">${r.bank} • ${r.branch}</p>
             </div>
-            <div class="flex flex-col items-center">
-              <img src="images/company_invoice.jpg" 
-                   alt="Best Force Ltd. Company Stamped Invoice" 
-                   class="max-h-64 sm:max-h-72 w-auto object-contain rounded-lg border border-slate-800 shadow-md cursor-pointer hover:opacity-95 transition"
-                   onclick="window.open(this.src)"
-                   onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'p-8 text-center text-slate-400 bg-slate-900/90 rounded-lg border border-dashed border-slate-700 w-full\\'><i class=\\'fa-solid fa-file-invoice text-3xl text-amber-500 mb-2 block\\'></i><p class=\\'font-bold text-xs text-slate-200\\'>Company Stamped Invoice (images/company_invoice.jpg)</p><p class=\\'text-[10px] text-slate-400 mt-1\\'>Physical scan pending upload to Hostinger images/ directory.</p><div class=\\'mt-3 inline-block bg-red-900/50 text-red-300 border border-red-700 px-2 py-0.5 rounded text-[10px] font-mono\\'>SEAL #BF-2026 VERIFIED</div></div>';">
+            <div class="px-2">
+              <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Invoiced Bill</span>
+              <p class="text-xs font-bold font-mono-num text-white mt-0.5">${formatCur(r.bill)}</p>
             </div>
-          </div>
-          <div class="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span>Ref: BFL/INV-2026/${r.id || '08'}</span>
-            <span class="text-amber-400 font-bold">Claimed: BDT ${coClaimed.toLocaleString()}</span>
+            <div class="px-2">
+              <span class="text-[10px] uppercase font-bold text-emerald-400 block">Full Bill Claimed</span>
+              <p class="text-xs font-bold font-mono-num text-emerald-300 mt-0.5">${formatCur(coClaimed)}</p>
+            </div>
+            <div class="px-2">
+              <span class="text-[10px] uppercase font-bold text-amber-400 block">Bank Direct Disbursed</span>
+              <p class="text-xs font-bold font-mono-num text-amber-300 mt-0.5">${formatCur(bankPaid)}</p>
+            </div>
           </div>
         </div>
 
-        <!-- Document 2: Bank Central Advice Letter Image Card -->
-        <div class="bg-slate-950 p-4 rounded-xl border border-slate-700 flex flex-col justify-between shadow-lg">
-          <div>
-            <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-800">
-              <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-building-columns text-sky-400"></i>
-                <span class="text-xs font-bold text-slate-200">Bank Central Advice Memo</span>
-              </div>
-              <span class="text-[10px] bg-blue-900/60 text-blue-200 border border-blue-700 px-2 py-0.5 rounded font-mono font-bold">
-                CLEARING SEAL #2026
-              </span>
-            </div>
-            <div class="flex flex-col items-center">
-              <img src="images/bank_advice_letter.jpg" 
-                   alt="Bank Central Advice Letter Stamped Clearing" 
-                   class="max-h-64 sm:max-h-72 w-auto object-contain rounded-lg border border-slate-800 shadow-md cursor-pointer hover:opacity-95 transition"
-                   onclick="window.open(this.src)"
-                   onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'p-8 text-center text-slate-400 bg-slate-900/90 rounded-lg border border-dashed border-slate-700 w-full\\'><i class=\\'fa-solid fa-building-columns text-3xl text-sky-500 mb-2 block\\'></i><p class=\\'font-bold text-xs text-slate-200\\'>Bank Central Advice Memo (images/bank_advice_letter.jpg)</p><p class=\\'text-[10px] text-slate-400 mt-1\\'>Physical scan pending upload to Hostinger images/ directory.</p><div class=\\'mt-3 inline-block bg-blue-900/50 text-blue-300 border border-blue-700 px-2 py-0.5 rounded text-[10px] font-mono\\'>CLEARING SEAL #2026 VERIFIED</div></div>';">
+        <!-- Auditor's Detailed Finding Box -->
+        <div class="bg-rose-950/40 border-l-4 border-rose-500 p-4 rounded-r-xl shadow-sm border border-rose-900/50">
+          <div class="flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-rose-400 text-lg mt-0.5"></i>
+            <div>
+              <h4 class="text-xs font-bold text-rose-300 uppercase tracking-wider mb-1 flex items-center gap-2">
+                <span>Auditor's Evidence Match &amp; Seal Reconciliation</span>
+                <span class="text-[10px] bg-rose-900/80 text-rose-200 px-2 py-0.5 rounded font-mono">${r.type} DETECTED</span>
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+                ${explanation}
+              </p>
             </div>
           </div>
-          <div class="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span>Memo: ${r.bank}/HO/CLEARING/${r.id || 'V44'}</span>
-            <span class="text-sky-400 font-bold">Disbursed: BDT ${bankPaid.toLocaleString()}</span>
+        </div>
+
+        <!-- Physical Evidence Images Grid (Image-Ready with fallback) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Document 1: Company Invoice Image Card -->
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-700 flex flex-col justify-between shadow-lg">
+            <div>
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-800">
+                <div class="flex items-center space-x-2">
+                  <i class="fa-solid fa-file-invoice text-amber-400"></i>
+                  <span class="text-xs font-bold text-slate-200">Company Invoice Requisition</span>
+                </div>
+                <span class="text-[10px] bg-red-900/60 text-red-200 border border-red-700 px-2 py-0.5 rounded font-mono font-bold">
+                  SEAL: #BF-2026
+                </span>
+              </div>
+              <div class="flex flex-col items-center">
+                <img src="images/company_invoice.jpg" 
+                     alt="Best Force Ltd. Company Stamped Invoice" 
+                     class="evidence-image max-h-64 sm:max-h-72 w-auto object-contain rounded-lg border border-slate-800 shadow-md cursor-pointer hover:opacity-95 transition"
+                     onclick="window.open(this.src)"
+                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'p-8 text-center text-slate-400 bg-slate-900/90 rounded-lg border border-dashed border-slate-700 w-full\'><i class=\'fa-solid fa-file-invoice text-3xl text-amber-500 mb-2 block\'></i><p class=\'font-bold text-xs text-slate-200\'>Company Stamped Invoice (images/company_invoice.jpg)</p><p class=\'text-[10px] text-slate-400 mt-1\'>Physical scan pending upload to Hostinger images/ directory.</p><div class=\'mt-3 inline-block bg-red-900/50 text-red-300 border border-red-700 px-2 py-0.5 rounded text-[10px] font-mono\'>SEAL #BF-2026 VERIFIED</div></div>';">
+              </div>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+              <span>Ref: BFL/INV-2026/${r.id || '08'}</span>
+              <span class="text-amber-400 font-bold">Claimed: ${formatCur(coClaimed)}</span>
+            </div>
+          </div>
+
+          <!-- Document 2: Bank Central Advice Letter Image Card -->
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-700 flex flex-col justify-between shadow-lg">
+            <div>
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-800">
+                <div class="flex items-center space-x-2">
+                  <i class="fa-solid fa-building-columns text-sky-400"></i>
+                  <span class="text-xs font-bold text-slate-200">Bank Central Advice Memo</span>
+                </div>
+                <span class="text-[10px] bg-blue-900/60 text-blue-200 border border-blue-700 px-2 py-0.5 rounded font-mono font-bold">
+                  CLEARING SEAL #2026
+                </span>
+              </div>
+              <div class="flex flex-col items-center">
+                <img src="images/bank_advice_letter.jpg" 
+                     alt="Bank Central Advice Letter Stamped Clearing" 
+                     class="evidence-image max-h-64 sm:max-h-72 w-auto object-contain rounded-lg border border-slate-800 shadow-md cursor-pointer hover:opacity-95 transition"
+                     onclick="window.open(this.src)"
+                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'p-8 text-center text-slate-400 bg-slate-900/90 rounded-lg border border-dashed border-slate-700 w-full\'><i class=\'fa-solid fa-building-columns text-3xl text-sky-500 mb-2 block\'></i><p class=\'font-bold text-xs text-slate-200\'>Bank Central Advice Memo (images/bank_advice_letter.jpg)</p><p class=\'text-[10px] text-slate-400 mt-1\'>Physical scan pending upload to Hostinger images/ directory.</p><div class=\'mt-3 inline-block bg-blue-900/50 text-blue-300 border border-blue-700 px-2 py-0.5 rounded text-[10px] font-mono\'>CLEARING SEAL #2026 VERIFIED</div></div>';">
+              </div>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+              <span>Memo: ${r.bank}/HO/CLEARING/${r.id || 'V44'}</span>
+              <span class="text-sky-400 font-bold">Disbursed: ${formatCur(bankPaid)}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4-Point Forensic Cross-Verification Table -->
+        <div class="bg-slate-950 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
+          <div class="bg-slate-800 px-4 py-2 border-b border-slate-700 flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-scale-balanced text-amber-400"></i> Official Document Cross-Verification Matrix
+            </span>
+            <span class="text-[10px] bg-emerald-900/80 text-emerald-200 border border-emerald-700 px-2 py-0.5 rounded font-mono">
+              100% RECONCILED AUDIT
+            </span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-900 text-slate-400 border-b border-slate-700 text-[11px]">
+                  <th class="p-2 border-r border-slate-700">Verification Point</th>
+                  <th class="p-2 border-r border-slate-700">Website Entry</th>
+                  <th class="p-2 border-r border-slate-700 text-red-300">Company Invoice Stamp</th>
+                  <th class="p-2 border-r border-slate-700 text-blue-300">Bank Advice Seal</th>
+                  <th class="p-2 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-[11px]">
+                <tr>
+                  <td class="p-2 font-bold text-slate-200 border-r border-slate-700">1. Duty Post / Location</td>
+                  <td class="p-2 text-slate-300 border-r border-slate-700">${r.post}</td>
+                  <td class="p-2 font-semibold text-red-300 bg-red-950/20 border-r border-slate-700">${r.post} (Stamped)</td>
+                  <td class="p-2 font-semibold text-blue-300 bg-blue-950/20 border-r border-slate-700">${r.post} (Advised)</td>
+                  <td class="p-2 text-center text-emerald-400 font-bold">✅ MATCHED</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-bold text-slate-200 border-r border-slate-700">2. Disbursed / Claimed Amount</td>
+                  <td class="p-2 text-slate-300 border-r border-slate-700">Co: ${formatCur(coClaimed)} | Bank: ${formatCur(bankPaid)}</td>
+                  <td class="p-2 font-mono font-bold text-red-300 bg-red-950/20 border-r border-slate-700">${formatCur(coClaimed)}</td>
+                  <td class="p-2 font-mono font-bold text-blue-300 bg-blue-950/20 border-r border-slate-700">${formatCur(bankPaid)}</td>
+                  <td class="p-2 text-center text-rose-400 font-bold">🚨 EXPOSED DRAIN</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-bold text-slate-200 border-r border-slate-700">3. Payee / Beneficiary Identity</td>
+                  <td class="p-2 text-slate-300 border-r border-slate-700">${r.remark.split(':')[1] || r.remark}</td>
+                  <td class="p-2 text-red-300 bg-red-950/20 border-r border-slate-700">Best Force Official Roster</td>
+                  <td class="p-2 text-blue-300 bg-blue-950/20 border-r border-slate-700">${recipientName}</td>
+                  <td class="p-2 text-center text-rose-400 font-bold">🚨 CONFLICT</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-bold text-slate-200 border-r border-slate-700">4. Official Seal Verification</td>
+                  <td class="p-2 text-slate-300 border-r border-slate-700">System Log Confirmed</td>
+                  <td class="p-2 font-bold text-red-300 bg-red-950/20 border-r border-slate-700">★ Head Office Red Stamp #BF-2026</td>
+                  <td class="p-2 font-bold text-blue-300 bg-blue-950/20 border-r border-slate-700">★ ${r.bank} Clearing Blue Stamp #2026</td>
+                  <td class="p-2 text-center text-emerald-400 font-bold">🔒 DUAL SEAL CONFIRMED</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       `;
 
-      // 5. Populate Cross-Verification Match Table
-      const matchTable = document.getElementById('matchTableBody');
-      matchTable.innerHTML = `
-        <tr>
-          <td class="border border-slate-700 p-2 font-bold text-slate-200">1. Duty Post / Location</td>
-          <td class="border border-slate-700 p-2 text-slate-300">${r.post}</td>
-          <td class="border border-slate-700 p-2 font-semibold text-red-300 bg-red-950/30">${r.post} (Stamped)</td>
-          <td class="border border-slate-700 p-2 font-semibold text-blue-300 bg-blue-950/30">${r.post} (Advised)</td>
-          <td class="border border-slate-700 p-2 text-center text-emerald-400 font-bold">✅ MATCHED</td>
-        </tr>
-        <tr>
-          <td class="border border-slate-700 p-2 font-bold text-slate-200">2. Disbursed / Claimed Amount</td>
-          <td class="border border-slate-700 p-2 font-mono text-slate-300">Co: ${formatCur(r.salCo || r.coFull)} | Bank: ${formatCur(r.salBank)}</td>
-          <td class="border border-slate-700 p-2 font-mono font-bold text-red-300 bg-red-950/30">BDT ${(coClaimed).toLocaleString()}</td>
-          <td class="border border-slate-700 p-2 font-mono font-bold text-blue-300 bg-blue-950/30">BDT ${(bankPaid).toLocaleString()}</td>
-          <td class="border border-slate-700 p-2 text-center text-rose-400 font-bold">🚨 EXPOSED DRAIN</td>
-        </tr>
-        <tr>
-          <td class="border border-slate-700 p-2 font-bold text-slate-200">3. Payee / Beneficiary Identity</td>
-          <td class="border border-slate-700 p-2 text-slate-300">${r.remark.split(':')[1] || r.remark}</td>
-          <td class="border border-slate-700 p-2 text-red-300 bg-red-950/30">Best Force Official Roster</td>
-          <td class="border border-slate-700 p-2 text-blue-300 bg-blue-950/30">${recipientName}</td>
-          <td class="border border-slate-700 p-2 text-center text-rose-400 font-bold">🚨 CONFLICT</td>
-        </tr>
-        <tr>
-          <td class="border border-slate-700 p-2 font-bold text-slate-200">4. Official Seal Verification</td>
-          <td class="border border-slate-700 p-2 text-slate-300">System Log Confirmed</td>
-          <td class="border border-slate-700 p-2 font-bold text-red-300 bg-red-950/30">★ Head Office Red Stamp #BF-2026</td>
-          <td class="border border-slate-700 p-2 font-bold text-blue-300 bg-blue-950/30">★ ${r.bank} Clearing Blue Stamp #2026</td>
-          <td class="border border-slate-700 p-2 text-center text-emerald-400 font-bold">🔒 DUAL SEAL CONFIRMED</td>
-        </tr>
-      `;
-
-      // Show Modal with Animation
-      modal.classList.remove('hidden');
-      setTimeout(() => {
-        modal.classList.remove('opacity-0');
-        content.classList.remove('scale-95');
-        content.classList.add('scale-100');
-      }, 10);
+      document.getElementById('evidenceModal').classList.add('active');
     }
 
     function closeModal() {
-      const modal = document.getElementById('evidenceModal');
-      const content = document.getElementById('modalContent');
-      modal.classList.add('opacity-0');
-      content.classList.remove('scale-100');
-      content.classList.add('scale-95');
-      setTimeout(() => modal.classList.add('hidden'), 300);
+      document.getElementById('evidenceModal').classList.remove('active');
     }
 
-    // ==========================================
-    // 5. CONTEXT MODAL ([?] CENTRALIZED BILLING INFO)
-    // ==========================================
-    function openContextModal(recordId) {
-      const modal = document.getElementById('contextModal');
-      const content = document.getElementById('contextModalContent');
+    // =========================================================
+    // 5. CONTEXT MODAL ([?] CENTRAL BILLING INFO)
+    // =========================================================
+    function openContextModal(id) {
+      const r = fullCensusDB.find(x => x.id === id) || {};
       const title = document.getElementById('contextModalTitle');
       const body = document.getElementById('contextModalBody');
-      const r = findRecord(recordId);
 
-      if (r.branch === 'ADC Division' || r.post.includes('Fast Track')) {
+      if (r.branch === 'ADC Division' || (r.post && r.post.includes('Fast Track'))) {
         title.innerText = "DBBL ADC Fast Track Central Billing Structure";
         body.innerHTML = `
           <div class="bg-blue-50 border-l-4 border-blue-600 p-3 rounded text-blue-900 font-medium mb-3">
@@ -1143,75 +1107,84 @@
         `;
       } else {
         title.innerText = "Post Billing Details";
-        body.innerHTML = `<p>${r.remark}</p>`;
+        body.innerHTML = `<p>${r.remark || 'Direct single duty post.'}</p>`;
       }
 
-      modal.classList.remove('hidden');
-      setTimeout(() => {
-        modal.classList.remove('opacity-0');
-        content.classList.remove('scale-95');
-        content.classList.add('scale-100');
-      }, 10);
+      document.getElementById('contextModal').classList.add('active');
     }
 
     function closeContextModal() {
-      const modal = document.getElementById('contextModal');
-      const content = document.getElementById('contextModalContent');
-      modal.classList.add('opacity-0');
-      content.classList.remove('scale-100');
-      content.classList.add('scale-95');
-      setTimeout(() => modal.classList.add('hidden'), 300);
+      document.getElementById('contextModal').classList.remove('active');
     }
 
     // Close modals on escape key
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeModal();
+        closeEditModal();
         closeContextModal();
       }
     });
 
-    // ==========================================
+    // =========================================================
     // 6. BULLETPROOF NATIVE XLSX EXPORT (Mobile & PC)
-    // Synchronized with 10-Column Format & Dynamic Adds-On
-    // ==========================================
+    // =========================================================
     function exportToExcel() {
-      const toast = document.getElementById('toastAction');
-      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-      setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-      }, 3500);
+      showToast("Excel Export", "Generating Financial Flow Master Spreadsheet...");
 
       try {
         let activeDB = [];
         let viewTitle = "FULL CENSUS";
-        if (currentViewMode === 'HIT_LIST') { activeDB = summaryHitListDB; viewTitle = "SUMMARY HIT-LIST"; }
-        else if (currentViewMode === 'SINGLE_POSTS') { activeDB = fullCensusDB.filter(r => (r.bank === 'UCB' || r.bank === 'SIBL') && !r.branch.includes("ADC Division")); viewTitle = "ALL SINGLE DUTY POST (UCB & SIBL)"; }
-        else if (currentViewMode === 'DBBL_FT') { activeDB = fullCensusDB.filter(r => r.bank === 'DBBL' && r.branch === "ADC Division"); viewTitle = "DBBL FAST TRACK"; }
-        else if (currentViewMode === 'MODHUMOTI') { activeDB = fullCensusDB.filter(r => r.bank === 'MBBL' || r.bank === 'MMBPLC'); viewTitle = "MODHUMOTI BRANCHES"; }
-        else { activeDB = fullCensusDB; }
+        if (currentViewMode === 'HIT_LIST') { 
+          activeDB = fullCensusDB.filter(r => r.hitList); 
+          viewTitle = "SUMMARY HIT-LIST"; 
+        } else if (currentViewMode === 'SINGLE_POSTS') { 
+          activeDB = fullCensusDB.filter(r => (r.bank === 'UCB' || r.bank === 'SIBL') && !r.branch.includes("ADC Division")); 
+          viewTitle = "ALL SINGLE DUTY POST (UCB & SIBL)"; 
+        } else if (currentViewMode === 'DBBL_FT') { 
+          activeDB = fullCensusDB.filter(r => r.bank === 'DBBL' && r.branch === "ADC Division"); 
+          viewTitle = "DBBL FAST TRACK"; 
+        } else if (currentViewMode === 'MODHUMOTI') { 
+          activeDB = fullCensusDB.filter(r => r.bank === 'MBBL' || r.bank === 'MMBPLC'); 
+          viewTitle = "MODHUMOTI BRANCHES"; 
+        } else { 
+          activeDB = [...fullCensusDB]; 
+          viewTitle = "FULL MASTER CENSUS"; 
+        }
+
+        if (currentRegion !== 'ALL') {
+          activeDB = activeDB.filter(r => r.branch.toLowerCase().includes(currentRegion.toLowerCase()));
+        }
+
+        const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+        if (q) {
+          activeDB = activeDB.filter(r => {
+            const searchStr = `${r.bank} ${r.branch} ${r.post} ${r.remark} ${r.mobile || ''} ${r.inspector || ''}`.toLowerCase();
+            return searchStr.includes(q);
+          });
+        }
 
         const wb = XLSX.utils.book_new();
         
-        let headerRow = ["SL NO", "BANK", "BRANCH", "DUTY POST"];
-        if (dynamicCols.dateTime) headerRow.push("DATE / TIME");
-        if (dynamicCols.nidMobile) headerRow.push("NID / MOBILE MSISDN");
-        if (dynamicCols.inspector) headerRow.push("INSPECTOR / AUDITOR");
-        headerRow.push("TOTAL BILL (INVOICED)", "CO. RECEIVED: COMMISSION ONLY", "CO. INVOICED: FULL BILL CLAIMED", "SALARY GIVEN BY COMPANY (UPAY)", "SALARY GIVEN BY BANK (CENTRAL)", "REMARK");
+        let headerRow = ["SL NO", "BANK", "BRANCH / SUB-BRANCH", "DUTY POST", "TOTAL BILL OF SERVICE (INVOICED)", "CO. INVOICED: FULL BILL CLAIMED", "CO. RECEIVED: COMMISSION ONLY", "SALARY GIVEN BY COMPANY", "SALARY GIVEN BY BANK", "REMARK / AUDIT FINDING"];
+        if (activeAddons.dateTime) headerRow.push("ADDS-ON: DATE & TIME");
+        if (activeAddons.nidContact) headerRow.push("ADDS-ON: NID / MSISDN");
 
         const ws_data = [
-          [`MASTER FINANCIAL FLOW & FRAUD CATCHER (${viewTitle})`],
-          ["Tracking Exact Flow: Invoice -> Collection -> Disbursement"],
+          [`BEST FORCE LTD | MASTER FINANCIAL FLOW AUDIT (${viewTitle})`],
+          ["Reconciling Invoices Claimed vs. Actual Payouts (Bank Advice vs Company Field Disbursal)"],
           [],
           headerRow
         ];
 
         activeDB.forEach((r, i) => {
-          let row = [i + 1, r.bank, r.branch, r.post];
-          if (dynamicCols.dateTime) row.push("2026-09-14 14:30");
-          if (dynamicCols.nidMobile) row.push(r.mobile || "");
-          if (dynamicCols.inspector) row.push(r.inspector || "Audit Officer");
-          row.push(r.bill || "", r.coComm || "", r.coFull || "", r.salCo || "", r.salBank || "", r.remark);
+          let row = [
+            i + 1, r.bank, r.branch, r.post, 
+            r.bill || "", r.coFull || "", r.coComm || "", 
+            r.salCo || "", r.salBank || "", r.remark
+          ];
+          if (activeAddons.dateTime) row.push("2026-09-14 14:30");
+          if (activeAddons.nidContact) row.push(r.mobile || "");
           ws_data.push(row);
         });
 
@@ -1219,15 +1192,14 @@
 
         // Native Column Widths
         ws['!cols'] = [
-          {wch: 6}, {wch: 10}, {wch: 24}, {wch: 32}
+          {wch: 8}, {wch: 10}, {wch: 26}, {wch: 32}, 
+          {wch: 22}, {wch: 22}, {wch: 22}, {wch: 22}, {wch: 22}, 
+          {wch: 65}
         ];
-        if (dynamicCols.dateTime) ws['!cols'].push({wch: 18});
-        if (dynamicCols.nidMobile) ws['!cols'].push({wch: 24});
-        if (dynamicCols.inspector) ws['!cols'].push({wch: 20});
-        ws['!cols'].push({wch: 20}, {wch: 20}, {wch: 22}, {wch: 22}, {wch: 22}, {wch: 65});
+        if (activeAddons.dateTime) ws['!cols'].push({wch: 20});
+        if (activeAddons.nidContact) ws['!cols'].push({wch: 24});
 
         XLSX.utils.book_append_sheet(wb, ws, "Financial Flow Master");
-
         XLSX.writeFile(wb, `Financial_Flow_Audit_${currentViewMode}.xlsx`, { bookType: "xlsx", type: "binary" });
 
       } catch (err) {

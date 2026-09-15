@@ -58,6 +58,32 @@
 
 ## 📜 Completed Updates & Changelog
 
+### [Update 016] — Live Quick Edit Modal, Sticky Actions Column & Refined Financial Layout (2026-09-15)
+- **Type:** UI/UX Upgrade, Live Quick Edit Engine & Forensic Action Workflow  
+- **Status:** ✅ COMPLETED  
+- **User Request / Objective:**
+  > Integrate the Live Edit Quick Fix Modal (`#editModal`), sticky `ACTIONS` column with `[Proof]` and `[Edit]` buttons, updated table column layout (`TOTAL BILL (INVOICED)`, `CO. INVOICED: FULL BILL CLAIMED`, `CO. RECEIVED: COMMISSION ONLY`, `SALARY GIVEN BY COMPANY`, `SALARY GIVEN BY BANK`), updated row styling based on status type (`FRAUD`, `RECON`, `SUSPICIOUS`, `CLEAN`), Toast notification feedback (`#toastAction`), and SheetJS XLSX export synchronization.
+- **Detailed Implementation Breakdown:**
+  1. **Live Edit Quick Fix Modal (`#editModal`):**
+     - Engineered interactive modal allowing authorized auditors to modify on-the-fly: `Total Bill (Invoiced)`, `Co. Invoiced: Full Bill Claimed`, `Co. Received: Commission Only`, `Salary Given By Company (Upay)`, `Salary Given By Bank (Central)`, `Status Type` (`CLEAN`, `RECON`, `SUSPICIOUS`, `FRAUD`), and `Remark / Audit Finding`.
+     - Integrated `saveEdit()` with instant in-memory dataset mutation in `fullCensusDB`, table re-render, and animated toast feedback notification.
+  2. **Sticky Actions Column & Enhanced Proof Engine:**
+     - Positioned a sticky right `ACTIONS` column featuring:
+       - Amber `[Edit]` button on every single row to trigger the quick edit modal.
+       - Dedicated crimson/amber gradient `[Proof]` button with stamp icon (`fa-stamp`) exclusively on flagged records (`FRAUD`, `SUSPICIOUS`, `RECON`).
+  3. **Table Column Ordering & Color Semantics:**
+     - Organized headers: `SL`, `BANK`, `BRANCH / DIV`, `DUTY POST`, `TOTAL BILL (INVOICED)`, `CO. INVOICED: FULL BILL CLAIMED` (Sky-900), `CO. RECEIVED: COMMISSION ONLY` (Sky-900), `SALARY GIVEN BY COMPANY` (Emerald-900), `SALARY GIVEN BY BANK` (Amber-900), `REMARK / AUDIT FINDING`, dynamic adds-on columns (`DATE & TIME`, `NID / MSISDN`), and `ACTIONS`.
+     - Color-coded rows: `FRAUD` (rose-50), `RECON` (blue-50), `SUSPICIOUS` (amber-50), and `CLEAN` (emerald-50).
+  4. **Dynamic Evidence Modal & Gallery Engine:**
+     - Evidence modal with `#imageGalleryGrid` rendering live case summaries, detailed auditor notes, physical scans (`images/company_invoice.jpg` and `images/bank_advice_letter.jpg`) with `onerror` fallbacks, and the 4-point cross-verification matrix.
+  5. **Native SheetJS (.xlsx) Export Synchronization:**
+     - Updated `exportToExcel()` to output the updated 10-column financial flow headers and dynamic adds-on columns.
+  6. **Dual Storage & Hostinger Deployment:**
+     - Synchronized `index.html`, `bank_salary_audit_report.html`, and `NOTE.md` to local workspace and Google Drive repository (`G:\My Drive\ALL WEBSITE WORKPLACE\BEST FORCE LTD COMPANY AND BANK AUDIT REPORT\`).
+     - Committed and pushed to GitHub `origin main` for automated Hostinger live deployment.
+
+---
+
 ### [Update 015] — Python Excel Master Generator Sync & Forensic Claim Reconciliation Alignment (2026-09-15)
 - **Type:** Spreadsheet Engine Overhaul, Data Reconciliation & Forensic View Synchronization  
 - **Status:** ✅ COMPLETED  
