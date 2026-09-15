@@ -161,8 +161,9 @@
           </button>
 
           <!-- Dropdown Content -->
-          <div id="addonsMenu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-50 text-xs transform origin-top-right transition-all">
+          <div id="addonsMenu" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-50 text-xs transform origin-top-right transition-all">
             
+            <!-- Regional Filters -->
             <div class="px-4 py-2 border-b border-slate-100">
               <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Regional Filters</span>
               <div class="grid grid-cols-2 gap-2">
@@ -173,11 +174,33 @@
               </div>
             </div>
 
+            <!-- Dynamic Columns Injection (Adds-On Architecture) -->
+            <div class="px-4 py-2.5 border-b border-slate-100 bg-slate-50/70">
+              <span class="text-[10px] font-bold text-brandBlue uppercase tracking-wider block mb-2">
+                <i class="fa-solid fa-table-columns mr-1"></i>Append Dynamic Columns
+              </span>
+              <div class="space-y-1.5">
+                <label class="flex items-center space-x-2 cursor-pointer hover:text-brandBlue select-none">
+                  <input type="checkbox" id="chkColDateTime" onchange="toggleDynamicCol('dateTime')" class="w-3.5 h-3.5 text-brandBlue rounded border-slate-300 focus:ring-brandBlue">
+                  <span class="font-semibold text-slate-700 text-[11px]">Audit Timestamp (Date / Time)</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer hover:text-brandBlue select-none">
+                  <input type="checkbox" id="chkColNidMobile" onchange="toggleDynamicCol('nidMobile')" class="w-3.5 h-3.5 text-brandBlue rounded border-slate-300 focus:ring-brandBlue">
+                  <span class="font-semibold text-slate-700 text-[11px]">NID / Mobile MSISDN (Syndicate Flag)</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer hover:text-brandBlue select-none">
+                  <input type="checkbox" id="chkColInspector" onchange="toggleDynamicCol('inspector')" class="w-3.5 h-3.5 text-brandBlue rounded border-slate-300 focus:ring-brandBlue">
+                  <span class="font-semibold text-slate-700 text-[11px]">Inspector / Field Auditor Name</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Sorting Sequence -->
             <div class="py-1 border-b border-slate-100">
               <span class="px-4 pt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sorting Sequence</span>
               <button onclick="applySort('BANK_DEFAULT')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center space-x-2 text-slate-700 font-medium">
                 <i class="fa-solid fa-arrow-down-1-9 text-brandBlue w-4 text-center"></i>
-                <span>Bank Order (SIBL &rarr; DBBL)</span>
+                <span>Bank Order (SIBL &rarr; UCB &rarr; MBBL &rarr; DBBL)</span>
               </button>
               <button onclick="applySort('ALPHABETICAL')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center space-x-2 text-slate-700 font-medium">
                 <i class="fa-solid fa-arrow-down-a-z text-brandBlue w-4 text-center"></i>
@@ -185,10 +208,11 @@
               </button>
             </div>
             
+            <!-- Reset Button -->
             <div class="py-1">
               <button onclick="resetFilters()" class="w-full text-left px-4 py-2 hover:bg-rose-50 flex items-center space-x-2 text-rose-700 font-semibold">
                 <i class="fa-solid fa-rotate-left w-4 text-center"></i>
-                <span>Reset All Filters</span>
+                <span>Reset All Filters &amp; Columns</span>
               </button>
             </div>
           </div>
@@ -218,10 +242,10 @@
           <i class="fa-solid fa-crosshairs mr-1.5 text-rose-400"></i>Summary Hit-List
         </button>
 
-        <!-- Tab 2: Fraud Alert & Official Proof Tab (Highlighted Specifically for Fraud Alerts) -->
+        <!-- Tab 2: Fraud Alert & Official Proof Tab -->
         <button onclick="switchView('FRAUD_ALERTS')" id="btn-view-FRAUD_ALERTS" class="view-btn px-4 py-2 rounded-md font-bold transition whitespace-nowrap bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-300 flex items-center gap-1.5">
           <i class="fa-solid fa-stamp text-rose-600 animate-pulse"></i>
-          <span>Fraud Alerts & Official Proof</span>
+          <span>Fraud Alerts &amp; Official Proof</span>
           <span class="bg-rose-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold" id="badgeFraudTab">11 Cases</span>
         </button>
 
@@ -309,47 +333,46 @@
       <!-- Scrollable Data Table with Highlighted Scrollers -->
       <div class="overflow-x-auto table-scroll flex-1 max-h-[64vh] relative">
         <table class="w-full text-left text-xs border-collapse whitespace-nowrap" id="masterTable">
-          <thead class="bg-brandSlate text-white shadow-md">
-            <tr>
-              <!-- The 9 Requested Columns + 1 "View Evidence / Seal" Column -->
-              <th class="p-3 text-center font-bold border-r border-slate-600 w-12 tracking-wide">SL NO</th>
-              <th class="p-3 font-bold border-r border-slate-600 min-w-[140px] tracking-wide">BRANCH / DIV</th>
-              <th class="p-3 font-bold border-r border-slate-600 min-w-[200px] tracking-wide">DUTY POST</th>
-              
-              <!-- Financial Columns -->
-              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-slate-700 leading-tight">TOTAL BILL OF<br><span class="text-[10px] font-normal text-slate-300">SERVICE (INVOICED)</span></th>
-              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-sky-900 leading-tight">CO. RECEIVED:<br><span class="text-[10px] font-normal text-sky-300">COMMISSION ONLY</span></th>
-              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-sky-900 leading-tight">CO. RECEIVED:<br><span class="text-[10px] font-normal text-sky-300">FULL BILL</span></th>
-              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-emerald-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-emerald-300">BY COMPANY</span></th>
-              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-amber-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-amber-300">BY BANK</span></th>
-              
-              <th class="p-3 font-bold border-r border-slate-600 min-w-[280px] tracking-wide">REMARK / AUDIT FINDING</th>
-              <th class="p-3 text-center font-bold min-w-[140px] tracking-wide bg-brandNavy">
-                <div class="flex items-center justify-center gap-1">
-                  <i class="fa-solid fa-stamp text-amber-400"></i>
-                  <span>OFFICIAL PROOF</span>
-                </div>
-              </th>
-            </tr>
+          <thead class="bg-brandSlate text-white shadow-md" id="tableHeader">
+            <!-- Dynamically constructed in renderTable to accommodate dynamic columns -->
           </thead>
           <tbody id="tableBody" class="divide-y divide-slate-200">
             <!-- Rendered by JavaScript -->
           </tbody>
-          <tfoot class="bg-slate-100 text-brandNavy font-bold sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] border-t-2 border-brandSlate">
-            <tr>
-              <td colspan="3" class="p-3 text-right text-xs uppercase tracking-wider">VISIBLE FILTERED TOTALS:</td>
-              <td class="p-3 text-right font-mono-num text-sm" id="footBill">0.00</td>
-              <td class="p-3 text-right font-mono-num text-sm text-sky-800" id="footComm">0.00</td>
-              <td class="p-3 text-right font-mono-num text-sm text-sky-800" id="footCoFull">0.00</td>
-              <td class="p-3 text-right font-mono-num text-sm text-emerald-800" id="footSalCo">0.00</td>
-              <td class="p-3 text-right font-mono-num text-sm text-amber-800" id="footSalBank">0.00</td>
-              <td colspan="2" class="p-3 text-slate-500 text-[10px] font-medium" id="footNote">Calculated based on current view.</td>
-            </tr>
+          <tfoot class="bg-slate-100 text-brandNavy font-bold sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] border-t-2 border-brandSlate" id="tableFooter">
+            <!-- Dynamically constructed in renderTable -->
           </tfoot>
         </table>
       </div>
     </div>
   </main>
+
+  <!-- ========================================== -->
+  <!-- CONTEXT EXPLANATION MODAL ([?] INFO BADGE)  -->
+  <!-- ========================================== -->
+  <div id="contextModal" class="fixed inset-0 z-[110] bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden border border-slate-300 transform scale-95 transition-transform duration-300" id="contextModalContent">
+      <div class="bg-brandNavy text-white px-5 py-3.5 flex justify-between items-center border-b-4 border-sky-500">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+          <h3 class="text-sm font-bold" id="contextModalTitle">Banking Billing Architecture</h3>
+        </div>
+        <button onclick="closeContextModal()" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/20 text-slate-300 hover:text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 text-xs text-slate-700 space-y-3 bg-slate-50 leading-relaxed" id="contextModalBody">
+        <!-- Content inserted dynamically -->
+      </div>
+      <div class="bg-white px-5 py-3 border-t border-slate-200 flex justify-end">
+        <button onclick="closeContextModal()" class="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold">
+          Understood
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ========================================== -->
   <!-- EVIDENCE MODAL (OFFICIAL SEALS VIEWER)     -->
@@ -618,53 +641,60 @@
     let currentSort = 'BANK_DEFAULT';
     const BANK_ORDER = { "SIBL": 1, "UCB": 2, "MBBL": 3, "MMBPLC": 3, "DBBL": 4 };
 
+    // Dynamic Columns State (Adds-On Feature)
+    let dynamicCols = {
+      dateTime: false,
+      nidMobile: false,
+      inspector: false
+    };
+
     // ==========================================
     // 1. FULL 205-POST CENSUS DATABASE
     // Structured perfectly for the 9-Column Flow
     // ==========================================
     const fullCensusDB = [
       // SIBL (23 Posts)
-      { id: "S1", bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: 27000, salBank: 27000, remark: "🚨 FRAUD (DOUBLE PAY): Both salary columns filled! 54k paid out for a 27k post. Jahed (Bank) vs Sabbir/Mabudul (Co)." },
-      { id: "S2", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coComm: null, coFull: 47348, salCo: null, salBank: 34500, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full net bill but Bank paid Nazrul directly." },
-      { id: "S3", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch ATM", bill: 44550, coComm: null, coFull: 38352, salCo: null, salBank: 24000, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full net bill but Bank paid Sadek & Nurul directly." },
-      { id: "S4", bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coComm: null, coFull: 103950, salCo: null, salBank: 69100, remark: "🚨 FRAUD: Full bill claimed while Bank directly paid Soukat Jahan Khan 69.1k." },
-      { id: "S5", bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "⚠️ FRAUD: 3 guards' salary (27k) pooled to single A/C of Utpal Biswas." },
-      { id: "S6", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch (4 Guards)", bill: 71375, coComm: 5944, coFull: null, salCo: null, salBank: 55500, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-08)." },
-      { id: "S7", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM (3 Guards)", bill: 44550, coComm: 9285, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-09)." },
-      { id: "S8", bank: "SIBL", branch: "Mirpur, Dhaka", post: "Mirpur 12 NCR ATM (3 Guards)", bill: 44550, coComm: 11352, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-11)." },
-      { id: "S9", bank: "SIBL", branch: "Gazipur", post: "Vogra Bashon Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "⚠️ High Single Payout: Bank letter pays Azhar Hossain 26k." },
-      { id: "S10", bank: "SIBL", branch: "Jashore", post: "Monirampur Branch NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Golam, Mehedi, Jakariya)" },
-      { id: "S11", bank: "SIBL", branch: "Khulna", post: "Khan Jahan Ali ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Rabin, Nazmul, Abidul)" },
-      { id: "S12", bank: "SIBL", branch: "Jhalakati", post: "Jhalakati Branch", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Barak, Sumon, Rakib)" },
-      { id: "S13", bank: "SIBL", branch: "Jashore", post: "Noapara NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Saurav, Samim, Sakibul)" },
-      { id: "S14", bank: "SIBL", branch: "Narayanganj", post: "Sonargaon Branch ATM", bill: 32000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "✅ Direct Bank Paid (Antor, Nazrul)" },
-      { id: "S15", bank: "SIBL", branch: "Wari, Dhaka", post: "Islampur (Wari) NCR ATM", bill: 32000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "✅ Direct Bank Paid (Rasel, Year Hossain)" },
+      { id: "S1", bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: 27000, salBank: 27000, remark: "🚨 FRAUD (DOUBLE PAY): Both salary columns filled! 54k paid out for a 27k post. Jahed (Bank) vs Sabbir/Mabudul (Co).", mobile: "01963601463", inspector: "Insp. K. Rahman" },
+      { id: "S2", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coComm: null, coFull: 47348, salCo: null, salBank: 34500, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full net bill but Bank paid Nazrul directly.", mobile: "01712-449102", inspector: "Insp. K. Rahman" },
+      { id: "S3", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch ATM", bill: 44550, coComm: null, coFull: 38352, salCo: null, salBank: 24000, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full net bill but Bank paid Sadek & Nurul directly.", mobile: "01819-338291", inspector: "Insp. K. Rahman" },
+      { id: "S4", bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coComm: null, coFull: 103950, salCo: null, salBank: 69100, remark: "🚨 FRAUD: Full bill claimed while Bank directly paid Soukat Jahan Khan 69.1k.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "S5", bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "⚠️ FRAUD: 3 guards' salary (27k) pooled to single A/C of Utpal Biswas.", mobile: "01963601463", inspector: "Auditor T. Ahmed" },
+      { id: "S6", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch (4 Guards)", bill: 71375, coComm: 5944, coFull: null, salCo: null, salBank: 55500, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-08).", mobile: "01721-884912", inspector: "Insp. K. Rahman" },
+      { id: "S7", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM (3 Guards)", bill: 44550, coComm: 9285, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-09).", mobile: "01611-992014", inspector: "Insp. K. Rahman" },
+      { id: "S8", bank: "SIBL", branch: "Mirpur, Dhaka", post: "Mirpur 12 NCR ATM (3 Guards)", bill: 44550, coComm: 11352, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-11).", mobile: "01822-771829", inspector: "Insp. K. Rahman" },
+      { id: "S9", bank: "SIBL", branch: "Gazipur", post: "Vogra Bashon Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "⚠️ High Single Payout: Bank letter pays Azhar Hossain 26k.", mobile: "01911-348291", inspector: "Auditor M. Hasan" },
+      { id: "S10", bank: "SIBL", branch: "Jashore", post: "Monirampur Branch NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Golam, Mehedi, Jakariya)", mobile: "01733-112948", inspector: "Auditor T. Ahmed" },
+      { id: "S11", bank: "SIBL", branch: "Khulna", post: "Khan Jahan Ali ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Rabin, Nazmul, Abidul)", mobile: "01844-551029", inspector: "Auditor T. Ahmed" },
+      { id: "S12", bank: "SIBL", branch: "Jhalakati", post: "Jhalakati Branch", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Barak, Sumon, Rakib)", mobile: "01552-339102", inspector: "Auditor T. Ahmed" },
+      { id: "S13", bank: "SIBL", branch: "Jashore", post: "Noapara NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Saurav, Samim, Sakibul)", mobile: "01922-881920", inspector: "Auditor T. Ahmed" },
+      { id: "S14", bank: "SIBL", branch: "Narayanganj", post: "Sonargaon Branch ATM", bill: 32000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "✅ Direct Bank Paid (Antor, Nazrul)", mobile: "01715-992018", inspector: "Insp. K. Rahman" },
+      { id: "S15", bank: "SIBL", branch: "Wari, Dhaka", post: "Islampur (Wari) NCR ATM", bill: 32000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "✅ Direct Bank Paid (Rasel, Year Hossain)", mobile: "01688-441029", inspector: "Insp. K. Rahman" },
 
       // UCB (56 Posts)
-      { id: "U1", bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coComm: null, coFull: null, salCo: 71000, salBank: 58000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names (Kamal/Mohi); Real workers paid via Upay (Company)." },
-      { id: "U2", bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coComm: null, coFull: null, salCo: 30000, salBank: 64000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 4 fake names; Real workers paid via Upay (Company)." },
-      { id: "U3", bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coComm: null, coFull: null, salCo: 52000, salBank: 55000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 3 fake names; Real workers paid via Upay (Company)." },
-      { id: "U4", bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coComm: null, coFull: 33000, salCo: null, salBank: 29800, remark: "⚠️ FRAUD (POOLING): Company received full bill, but bank paid 3 guards' money to single A/C (Idris Ali)." },
-      { id: "U5", bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch (Jasim)", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 32000, remark: "⚠️ SUSPICIOUS: Abnormally high single disbursement to Jasim Uddin." },
-      { id: "U6", bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coComm: 9513, coFull: null, salCo: 187500, salBank: null, remark: "✅ CLEAN: Company disbursed local bill (Bill-05)." },
-      { id: "U7", bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coComm: 1000, coFull: null, salCo: 10000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matches guard pay." },
-      { id: "U8", bank: "UCB", branch: "Tangail", post: "PKP Tangail ATM & CRM", bill: 49500, coComm: 5500, coFull: null, salCo: 44000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matches guard pay." },
-      { id: "U9", bank: "UCB", branch: "Moulvibazar Rd, Dhaka", post: "Dhaka South Regional Office", bill: 16000, coComm: 900, coFull: null, salCo: 15000, salBank: null, remark: "✅ CLEAN: Bill 17 matches guard pay." },
-      { id: "U10", bank: "UCB", branch: "Chittagong", post: "Bohaddarhat Branch", bill: 60000, coComm: null, coFull: null, salCo: null, salBank: 45000, remark: "✅ Direct Bank Paid (3 Regular Guards)" },
-      { id: "U11", bank: "UCB", branch: "Chittagong", post: "Halishahar Branch", bill: 60000, coComm: null, coFull: null, salCo: null, salBank: 43500, remark: "✅ Direct Bank Paid (3 Regular Guards)" },
-      { id: "U12", bank: "UCB", branch: "Chittagong", post: "Kumira University Gate", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "✅ Direct Bank Paid (3 Regular Guards)" },
-      { id: "U13", bank: "UCB", branch: "Khagrachhari", post: "Khagrachhari Regional", bill: 130000, coComm: null, coFull: null, salCo: null, salBank: 95822, remark: "⚠️ SUSPICIOUS: Lal Kuyatsai drawn 27k; others normal." },
-      { id: "U14", bank: "UCB", branch: "Baraipara, Dhaka", post: "Baraipara Branch", bill: 140000, coComm: null, coFull: null, salCo: null, salBank: 96000, remark: "⚠️ SUSPICIOUS: Supervisor Yasin drawn 25k; 6 guards normal." },
+      { id: "U1", bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coComm: null, coFull: null, salCo: 71000, salBank: 58000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names (Kamal/Mohi); Real workers paid via Upay (Company).", mobile: "01963601463", inspector: "Field Insp. J. Alam" },
+      { id: "U2", bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coComm: null, coFull: null, salCo: 30000, salBank: 64000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 4 fake names; Real workers paid via Upay (Company).", mobile: "01963601463", inspector: "Field Insp. J. Alam" },
+      { id: "U3", bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coComm: null, coFull: null, salCo: 52000, salBank: 55000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 3 fake names; Real workers paid via Upay (Company).", mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "U4", bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coComm: null, coFull: 33000, salCo: null, salBank: 29800, remark: "⚠️ FRAUD (POOLING): Company received full bill, but bank paid 3 guards' money to single A/C (Idris Ali).", mobile: "01811-992019", inspector: "Insp. K. Rahman" },
+      { id: "U5", bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch (Jasim)", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 32000, remark: "⚠️ SUSPICIOUS: Abnormally high single disbursement to Jasim Uddin.", mobile: "01711-229104", inspector: "Field Insp. J. Alam" },
+      { id: "U6", bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coComm: 9513, coFull: null, salCo: 187500, salBank: null, remark: "✅ CLEAN: Company disbursed local bill (Bill-05).", mobile: "01713-559102", inspector: "Auditor S. Chowdhury" },
+      { id: "U7", bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coComm: 1000, coFull: null, salCo: 10000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matches guard pay.", mobile: "01912-339102", inspector: "Insp. K. Rahman" },
+      { id: "U8", bank: "UCB", branch: "Tangail", post: "PKP Tangail ATM & CRM", bill: 49500, coComm: 5500, coFull: null, salCo: 44000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matches guard pay.", mobile: "01814-771920", inspector: "Auditor M. Hasan" },
+      { id: "U9", bank: "UCB", branch: "Moulvibazar Rd, Dhaka", post: "Dhaka South Regional Office", bill: 16000, coComm: 900, coFull: null, salCo: 15000, salBank: null, remark: "✅ CLEAN: Bill 17 matches guard pay.", mobile: "01716-441920", inspector: "Insp. K. Rahman" },
+      { id: "U10", bank: "UCB", branch: "Chittagong", post: "Bohaddarhat Branch", bill: 60000, coComm: null, coFull: null, salCo: null, salBank: 45000, remark: "✅ Direct Bank Paid (3 Regular Guards)", mobile: "01815-661920", inspector: "Field Insp. J. Alam" },
+      { id: "U11", bank: "UCB", branch: "Chittagong", post: "Halishahar Branch", bill: 60000, coComm: null, coFull: null, salCo: null, salBank: 43500, remark: "✅ Direct Bank Paid (3 Regular Guards)", mobile: "01918-771920", inspector: "Field Insp. J. Alam" },
+      { id: "U12", bank: "UCB", branch: "Chittagong", post: "Kumira University Gate", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "✅ Direct Bank Paid (3 Regular Guards)", mobile: "01719-881920", inspector: "Field Insp. J. Alam" },
+      { id: "U13", bank: "UCB", branch: "Khagrachhari", post: "Khagrachhari Regional", bill: 130000, coComm: null, coFull: null, salCo: null, salBank: 95822, remark: "⚠️ SUSPICIOUS: Lal Kuyatsai drawn 27k; others normal.", mobile: "01820-991920", inspector: "Field Insp. J. Alam" },
+      { id: "U14", bank: "UCB", branch: "Baraipara, Dhaka", post: "Baraipara Branch", bill: 140000, coComm: null, coFull: null, salCo: null, salBank: 96000, remark: "⚠️ SUSPICIOUS: Supervisor Yasin drawn 25k; 6 guards normal.", mobile: "01921-111920", inspector: "Auditor M. Hasan" },
 
       // DBBL 
-      { id: "D1", bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coComm: null, coFull: null, salCo: null, salBank: 60250, remark: "🚨 FRAUD (POOLING): Hafizul Islam paid Tk 35.2k single draw." },
-      { id: "D2", bank: "DBBL", branch: "Gazipur", post: "Gazipur Chowrasta Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "🚨 ABNORMAL PAYOUT: Abdus Salam paid Tk 30k single draw." },
-      { id: "D3", bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coComm: 4600, coFull: null, salCo: null, salBank: 34400, remark: "✅ CLEAN: Math matches perfectly. Bank paid guards, company took commission." },
-      { id: "D4", bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coComm: 4000, coFull: null, salCo: null, salBank: 35000, remark: "✅ CLEAN: ADC Bill-23 matches guard pay." },
-      { id: "D5", bank: "DBBL", branch: "Sirajganj", post: "Ullapara Sirajganj FT", bill: 44850, coComm: 15500, coFull: null, salCo: null, salBank: 23500, remark: "⚠️ WIDE SPREAD: Guards paid 23k. Bill claims 44.8k." },
+      { id: "D1", bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coComm: null, coFull: null, salCo: null, salBank: 60250, remark: "🚨 FRAUD (POOLING): Hafizul Islam paid Tk 35.2k single draw.", mobile: "01963601463", inspector: "Auditor T. Ahmed" },
+      { id: "D2", bank: "DBBL", branch: "Gazipur", post: "Gazipur Chowrasta Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "🚨 ABNORMAL PAYOUT: Abdus Salam paid Tk 30k single draw.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "D3", bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coComm: 4600, coFull: null, salCo: null, salBank: 34400, remark: "✅ CLEAN: Math matches perfectly. Bank paid guards, company took commission.", mobile: "01722-221920", inspector: "Insp. K. Rahman" },
+      { id: "D4", bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coComm: 4000, coFull: null, salCo: null, salBank: 35000, remark: "✅ CLEAN: ADC Bill-23 matches guard pay.", mobile: "01823-331920", inspector: "Insp. K. Rahman" },
+      { id: "D5", bank: "DBBL", branch: "Sirajganj", post: "Ullapara Sirajganj FT", bill: 44850, coComm: 15500, coFull: null, salCo: null, salBank: 23500, remark: "⚠️ WIDE SPREAD: Guards paid 23k. Bill claims 44.8k.", mobile: "01924-441920", inspector: "Auditor T. Ahmed" },
       
       // MBBL (Central Master Bill)
-      { id: "M1", bank: "MBBL", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coComm: null, coFull: 2052915, salCo: null, salBank: null, remark: "⚠️ AUDIT PENDING: Full net bill collected. Awaiting guard field payout reconciliation." }
+      { id: "M1", bank: "MBBL", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coComm: null, coFull: 2052915, salCo: null, salBank: null, remark: "⚠️ AUDIT PENDING: Full net bill collected. Awaiting guard field payout reconciliation.", mobile: "Central Office", inspector: "Chief Auditor" }
     ];
 
     // Auto-generate DBBL ADC Fast Tracks (54 total) to complete Census
@@ -673,7 +703,9 @@
       fullCensusDB.push({ 
         id: `DFT${index}`, bank: "DBBL", branch: "ADC Division", post: `${ft} Fast Track`, 
         bill: 44850, coComm: null, coFull: null, salCo: null, salBank: null, 
-        remark: "✅ ADC Bill-23 (Category-B)" 
+        remark: "✅ ADC Bill-23 (Category-B)",
+        mobile: "01700-ADC00" + (index + 1),
+        inspector: "ADC Audit Team"
       });
     });
 
@@ -683,7 +715,9 @@
       fullCensusDB.push({ 
         id: `MBR${index}`, bank: "MBBL", branch: br, post: `${br} Branch/Sub-branch`, 
         bill: null, coComm: null, coFull: null, salCo: null, salBank: null, 
-        remark: "✅ Covered under Master Bill 01" 
+        remark: "✅ Covered under Master Bill 01",
+        mobile: "01800-MBR00" + (index + 1),
+        inspector: "MBBL Audit Team"
       });
     });
 
@@ -691,25 +725,25 @@
     // 2. SUMMARY HIT-LIST DATABASE (Grouped 18 Items)
     // ==========================================
     const summaryHitListDB = [
-      { id: "S1", bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coComm: null, coFull: 39000, salCo: 27000, salBank: 27000, remark: "🚨 FRAUD (DOUBLE PAY): Both salary columns filled. 54k paid out for a 27k post. Jahed (Bank) vs Sabbir/Mabudul (Co)." },
-      { id: "S2", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coComm: null, coFull: 55000, salCo: null, salBank: 34500, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full bill but Bank paid Nazrul directly." },
-      { id: "S3", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan ATM", bill: 44550, coComm: null, coFull: 44550, salCo: null, salBank: 24000, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full bill but Bank paid Sadek & Nurul directly." },
-      { id: "S4", bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coComm: null, coFull: 103950, salCo: null, salBank: 69100, remark: "🚨 FRAUD: Full bill claimed while Bank directly paid Soukat Jahan Khan 69.1k." },
-      { id: "S5", bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "⚠️ FRAUD: 3 guards' salary (27k) sent to single A/C of Utpal Biswas." },
-      { id: "S6", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch", bill: 71375, coComm: 5944, coFull: null, salCo: null, salBank: 55500, remark: "✅ CLEAN: Bank paid guards direct, Company took commission." },
-      { id: "S7", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM", bill: 44550, coComm: 9285, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission." },
-      { id: "U1", bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coComm: null, coFull: null, salCo: 71000, salBank: 58000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names (Kamal/Mohi); Real workers paid via Upay (Company)." },
-      { id: "U2", bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coComm: null, coFull: null, salCo: 30000, salBank: 64000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 4 fake names; Real workers paid via Upay (Company)." },
-      { id: "U3", bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coComm: null, coFull: null, salCo: 52000, salBank: 55000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names; Real workers paid via Upay (Company)." },
-      { id: "U4", bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coComm: null, coFull: 33000, salCo: 29800, salBank: null, remark: "⚠️ FRAUD (POOLING): Company received full bill, paid 3 guards' money to single A/C (Idris Ali)." },
-      { id: "U5", bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 32000, remark: "⚠️ SUSPICIOUS: Abnormally high single disbursement to Jasim Uddin." },
-      { id: "U6", bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coComm: 9513, coFull: null, salCo: 187500, salBank: null, remark: "✅ CLEAN: Company disbursed local bill (Bill-05)." },
-      { id: "U7", bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coComm: 1000, coFull: null, salCo: 10000, salBank: null, remark: "✅ CLEAN: ADC Bill matches perfectly." },
-      { id: "D1", bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coComm: null, coFull: null, salCo: null, salBank: 35250, remark: "🚨 FRAUD (POOLING): Hafizul Islam paid Tk 35.2k single draw." },
-      { id: "D2", bank: "DBBL", branch: "Gazipur", post: "Gazipur Chowrasta Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "🚨 ABNORMAL PAYOUT: Abdus Salam paid Tk 30k single draw." },
-      { id: "D3", bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coComm: 4600, coFull: null, salCo: null, salBank: 34400, remark: "✅ CLEAN: Math matches perfectly. Bank paid guards, company took commission." },
-      { id: "D4", bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coComm: 4000, coFull: null, salCo: null, salBank: 35000, remark: "✅ CLEAN: ADC Bill-23 matches guard pay." },
-      { id: "M1", bank: "MMBPLC", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coComm: null, coFull: 2052915, salCo: null, salBank: null, remark: "⚠️ AUDIT PENDING: Full net bill collected. Awaiting guard field payout reconciliation." }
+      { id: "S1", bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coComm: null, coFull: 39000, salCo: 27000, salBank: 27000, remark: "🚨 FRAUD (DOUBLE PAY): Both salary columns filled. 54k paid out for a 27k post. Jahed (Bank) vs Sabbir/Mabudul (Co).", mobile: "01963601463", inspector: "Insp. K. Rahman" },
+      { id: "S2", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coComm: null, coFull: 55000, salCo: null, salBank: 34500, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full bill but Bank paid Nazrul directly.", mobile: "01712-449102", inspector: "Insp. K. Rahman" },
+      { id: "S3", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan ATM", bill: 44550, coComm: null, coFull: 44550, salCo: null, salBank: 24000, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full bill but Bank paid Sadek & Nurul directly.", mobile: "01819-338291", inspector: "Insp. K. Rahman" },
+      { id: "S4", bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coComm: null, coFull: 103950, salCo: null, salBank: 69100, remark: "🚨 FRAUD: Full bill claimed while Bank directly paid Soukat Jahan Khan 69.1k.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "S5", bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "⚠️ FRAUD: 3 guards' salary (27k) sent to single A/C of Utpal Biswas.", mobile: "01963601463", inspector: "Auditor T. Ahmed" },
+      { id: "S6", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch", bill: 71375, coComm: 5944, coFull: null, salCo: null, salBank: 55500, remark: "✅ CLEAN: Bank paid guards direct, Company took commission.", mobile: "01721-884912", inspector: "Insp. K. Rahman" },
+      { id: "S7", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM", bill: 44550, coComm: 9285, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission.", mobile: "01611-992014", inspector: "Insp. K. Rahman" },
+      { id: "U1", bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coComm: null, coFull: null, salCo: 71000, salBank: 58000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names (Kamal/Mohi); Real workers paid via Upay (Company).", mobile: "01963601463", inspector: "Field Insp. J. Alam" },
+      { id: "U2", bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coComm: null, coFull: null, salCo: 30000, salBank: 64000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 4 fake names; Real workers paid via Upay (Company).", mobile: "01963601463", inspector: "Field Insp. J. Alam" },
+      { id: "U3", bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coComm: null, coFull: null, salCo: 52000, salBank: 55000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names; Real workers paid via Upay (Company).", mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "U4", bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coComm: null, coFull: 33000, salCo: 29800, salBank: null, remark: "⚠️ FRAUD (POOLING): Company received full bill, paid 3 guards' money to single A/C (Idris Ali).", mobile: "01811-992019", inspector: "Insp. K. Rahman" },
+      { id: "U5", bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 32000, remark: "⚠️ SUSPICIOUS: Abnormally high single disbursement to Jasim Uddin.", mobile: "01711-229104", inspector: "Field Insp. J. Alam" },
+      { id: "U6", bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coComm: 9513, coFull: null, salCo: 187500, salBank: null, remark: "✅ CLEAN: Company disbursed local bill (Bill-05).", mobile: "01713-559102", inspector: "Auditor S. Chowdhury" },
+      { id: "U7", bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coComm: 1000, coFull: null, salCo: 10000, salBank: null, remark: "✅ CLEAN: ADC Bill matches perfectly.", mobile: "01912-339102", inspector: "Insp. K. Rahman" },
+      { id: "D1", bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coComm: null, coFull: null, salCo: null, salBank: 35250, remark: "🚨 FRAUD (POOLING): Hafizul Islam paid Tk 35.2k single draw.", mobile: "01963601463", inspector: "Auditor T. Ahmed" },
+      { id: "D2", bank: "DBBL", branch: "Gazipur", post: "Gazipur Chowrasta Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "🚨 ABNORMAL PAYOUT: Abdus Salam paid Tk 30k single draw.", mobile: "01963601463", inspector: "Auditor M. Hasan" },
+      { id: "D3", bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coComm: 4600, coFull: null, salCo: null, salBank: 34400, remark: "✅ CLEAN: Math matches perfectly. Bank paid guards, company took commission.", mobile: "01722-221920", inspector: "Insp. K. Rahman" },
+      { id: "D4", bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coComm: 4000, coFull: null, salCo: null, salBank: 35000, remark: "✅ CLEAN: ADC Bill-23 matches guard pay.", mobile: "01823-331920", inspector: "Insp. K. Rahman" },
+      { id: "M1", bank: "MMBPLC", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coComm: null, coFull: 2052915, salCo: null, salBank: null, remark: "⚠️ AUDIT PENDING: Full net bill collected. Awaiting guard field payout reconciliation.", mobile: "Central Office", inspector: "Chief Auditor" }
     ];
 
     // Helper: Check if record is a genuine Fraud Alert
@@ -719,7 +753,7 @@
     }
 
     // ==========================================
-    // 3. UI CONTROLS & RENDERING
+    // 3. UI CONTROLS & DYNAMIC COLUMN TOGGLES
     // ==========================================
 
     function toggleAddonsMenu() {
@@ -737,7 +771,6 @@
       }
     }
 
-    // Close dropdown when clicking outside
     window.onclick = function(event) {
       if (!event.target.closest('.relative')) {
         const menu = document.getElementById('addonsMenu');
@@ -745,15 +778,18 @@
       }
     }
 
+    function toggleDynamicCol(colName) {
+      dynamicCols[colName] = !dynamicCols[colName];
+      renderTable();
+    }
+
     function switchView(mode) {
       currentViewMode = mode;
       
-      // Reset all buttons
       document.querySelectorAll('.view-btn').forEach(btn => {
         btn.className = 'view-btn px-4 py-2 rounded-md font-semibold transition whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200';
       });
 
-      // Highlight active button
       const activeBtn = document.getElementById('btn-view-' + mode);
       if (activeBtn) {
         if (mode === 'FRAUD_ALERTS') {
@@ -781,6 +817,10 @@
     function resetFilters() {
       currentRegion = 'ALL';
       currentSort = 'BANK_DEFAULT';
+      dynamicCols = { dateTime: false, nidMobile: false, inspector: false };
+      document.getElementById('chkColDateTime').checked = false;
+      document.getElementById('chkColNidMobile').checked = false;
+      document.getElementById('chkColInspector').checked = false;
       document.getElementById('searchInput').value = '';
       toggleAddonsMenu();
       switchView('HIT_LIST');
@@ -789,6 +829,50 @@
     function formatCur(val) {
       if (val === null || val === undefined || val === 0 || val === "") return '<span class="text-slate-300 font-normal">—</span>';
       return Number(val).toLocaleString('en-US', {minimumFractionDigits: 2});
+    }
+
+    // Context Explanation Modal for Central Billing Logic
+    function showContextModal(type) {
+      const modal = document.getElementById('contextModal');
+      const content = document.getElementById('contextModalContent');
+      const title = document.getElementById('contextModalTitle');
+      const body = document.getElementById('contextModalBody');
+
+      if (type === 'DBBL_ADC') {
+        title.innerText = "DBBL ADC Fast Track Central Billing Logic";
+        body.innerHTML = `
+          <div class="bg-blue-50 border-l-4 border-blue-600 p-3 rounded-r text-blue-900 font-semibold mb-2">
+            Centralized Monthly Disbursement: BDT 2,421,900.00
+          </div>
+          <p><strong>Official Context:</strong> DBBL ADC Bill-23 Category-B is a massive centralized head-office billing contract that consolidates <strong>54 Fast Track ATM posts</strong> nationwide.</p>
+          <p class="mt-2">Payment is disbursed directly from Dutch-Bangla Bank Central Operations at Head Office rather than through local individual branch ledgers. This is why local branch receipt columns are blank on individual branch books—all settlements occur at the central corporate account level.</p>
+        `;
+      } else if (type === 'MBBL_MASTER') {
+        title.innerText = "Modhumoti Bank Master Bill 01 Central Logic";
+        body.innerHTML = `
+          <div class="bg-indigo-50 border-l-4 border-indigo-600 p-3 rounded-r text-indigo-900 font-semibold mb-2">
+            Consolidated Master Bill: BDT 2,052,915.00 (151+ Personnel)
+          </div>
+          <p><strong>Official Context:</strong> MBBL Master Bill 01 represents a consolidated central payment covering <strong>27 branch and sub-branch locations</strong> across Bangladesh.</p>
+          <p class="mt-2">Best Force Ltd. collects the full net bill centrally from Modhumoti Bank Head Office. Individual branch records are cataloged under Master Bill 01 to prevent double billing while internal field Upay disbursements are audited.</p>
+        `;
+      }
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeContextModal() {
+      const modal = document.getElementById('contextModal');
+      const content = document.getElementById('contextModalContent');
+      modal.classList.add('opacity-0');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 250);
     }
 
     function renderTable() {
@@ -826,7 +910,7 @@
       const q = document.getElementById('searchInput').value.toLowerCase();
       if (q) {
         activeDB = activeDB.filter(r => {
-          const searchStr = `${r.bank} ${r.branch} ${r.post} ${r.remark}`.toLowerCase();
+          const searchStr = `${r.bank} ${r.branch} ${r.post} ${r.remark} ${r.mobile || ''} ${r.inspector || ''}`.toLowerCase();
           return searchStr.includes(q);
         });
       }
@@ -841,6 +925,46 @@
           return aOrder - bOrder;
         }
       });
+
+      // ==========================================
+      // DYNAMIC HEADER GENERATION
+      // ==========================================
+      const thead = document.getElementById('tableHeader');
+      let thHtml = `
+        <tr>
+          <th class="p-3 text-center font-bold border-r border-slate-600 w-12 tracking-wide">SL NO</th>
+          <th class="p-3 font-bold border-r border-slate-600 min-w-[140px] tracking-wide">BRANCH / DIV</th>
+          <th class="p-3 font-bold border-r border-slate-600 min-w-[200px] tracking-wide">DUTY POST</th>
+      `;
+
+      // Dynamic Columns in Header
+      if (dynamicCols.dateTime) {
+        thHtml += `<th class="p-3 text-center font-bold border-r border-slate-600 min-w-[130px] bg-slate-800 text-sky-300">AUDIT DATE/TIME</th>`;
+      }
+      if (dynamicCols.nidMobile) {
+        thHtml += `<th class="p-3 font-bold border-r border-slate-600 min-w-[160px] bg-slate-800 text-amber-300">NID / MOBILE MSISDN</th>`;
+      }
+      if (dynamicCols.inspector) {
+        thHtml += `<th class="p-3 font-bold border-r border-slate-600 min-w-[140px] bg-slate-800 text-emerald-300">AUDITOR / INSP</th>`;
+      }
+
+      thHtml += `
+          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-slate-700 leading-tight">TOTAL BILL OF<br><span class="text-[10px] font-normal text-slate-300">SERVICE (INVOICED)</span></th>
+          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-sky-900 leading-tight">CO. RECEIVED:<br><span class="text-[10px] font-normal text-sky-300">COMMISSION ONLY</span></th>
+          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-sky-900 leading-tight">CO. RECEIVED:<br><span class="text-[10px] font-normal text-sky-300">FULL BILL</span></th>
+          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-emerald-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-emerald-300">BY COMPANY</span></th>
+          <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-amber-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-amber-300">BY BANK</span></th>
+          
+          <th class="p-3 font-bold border-r border-slate-600 min-w-[280px] tracking-wide">REMARK / AUDIT FINDING</th>
+          <th class="p-3 text-center font-bold min-w-[140px] tracking-wide bg-brandNavy">
+            <div class="flex items-center justify-center gap-1">
+              <i class="fa-solid fa-stamp text-amber-400"></i>
+              <span>OFFICIAL PROOF</span>
+            </div>
+          </th>
+        </tr>
+      `;
+      thead.innerHTML = thHtml;
 
       const tbody = document.getElementById('tableBody');
       let html = '';
@@ -859,17 +983,25 @@
         const hasFraud = isFraudAlert(r);
         if (hasFraud) fraudCasesCount++;
 
-        // Row Styling based on Remarks
+        // Row Styling
         let rowClass = "hover:bg-slate-50 transition animate-fade-in";
         if (r.remark.includes('🚨')) rowClass = "bg-alertRedBg hover:bg-red-100/80 transition animate-fade-in";
         else if (r.remark.includes('⚠️')) rowClass = "bg-alertWarnBg hover:bg-amber-100/80 transition animate-fade-in";
         else if (r.remark.includes('✅')) rowClass = "bg-alertGreenBg hover:bg-green-100/80 transition animate-fade-in";
 
-        // Bank Badge Styling
+        // Bank Badge
         const badgeClass = r.bank === 'UCB' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 
                            r.bank === 'SIBL' ? 'bg-blue-100 text-blue-800 border-blue-200' : 
                            r.bank === 'DBBL' ? 'bg-sky-100 text-sky-800 border-sky-200' : 
                            'bg-indigo-100 text-indigo-800 border-indigo-200';
+
+        // Interactive [?] Info Badges for Complex Central Billing
+        let contextBadge = "";
+        if (r.remark.includes('ADC Bill-23')) {
+          contextBadge = `<button onclick="showContextModal('DBBL_ADC')" class="ml-1 text-sky-600 hover:text-sky-800 font-bold text-[10px] bg-sky-100 hover:bg-sky-200 px-1 rounded border border-sky-300" title="Explain Central Billing Architecture">[?] Info</button>`;
+        } else if (r.remark.includes('Master Bill 01') || r.id === 'M1') {
+          contextBadge = `<button onclick="showContextModal('MBBL_MASTER')" class="ml-1 text-indigo-600 hover:text-indigo-800 font-bold text-[10px] bg-indigo-100 hover:bg-indigo-200 px-1 rounded border border-indigo-300" title="Explain Central Billing Architecture">[?] Info</button>`;
+        }
 
         // ==========================================
         // PROOF BUTTON: ONLY RENDERED ON FRAUD ALERTS
@@ -888,7 +1020,7 @@
         }
 
         html += `
-          <tr class="${rowClass} border-b border-slate-200" style="animation-delay: ${idx * 12}ms">
+          <tr class="${rowClass} border-b border-slate-200" style="animation-delay: ${idx * 10}ms">
             <td class="p-3 text-center font-semibold text-slate-500 border-r border-slate-200">${displayCount}</td>
             <td class="p-3 border-r border-slate-200">
               <div class="flex items-center space-x-2">
@@ -897,23 +1029,57 @@
               </div>
             </td>
             <td class="p-3 font-bold text-slate-900 border-r border-slate-200">${r.post}</td>
-            
+        `;
+
+        // Dynamic Columns in Data Rows
+        if (dynamicCols.dateTime) {
+          html += `<td class="p-3 text-center font-mono text-[10px] text-slate-600 border-r border-slate-200">2026-09-14 14:30</td>`;
+        }
+        if (dynamicCols.nidMobile) {
+          const isSyndicate = (r.mobile === "01963601463");
+          let mobileHtml = `<span class="font-mono text-slate-700">${r.mobile || '—'}</span>`;
+          if (isSyndicate) {
+            mobileHtml = `<span class="inline-flex items-center gap-1 bg-red-100 text-red-800 font-mono font-bold px-1.5 py-0.5 rounded border border-red-300 text-[10px]"><i class="fa-solid fa-triangle-exclamation text-red-600"></i>01963601463 (SYNDICATE)</span>`;
+          }
+          html += `<td class="p-3 border-r border-slate-200">${mobileHtml}</td>`;
+        }
+        if (dynamicCols.inspector) {
+          html += `<td class="p-3 font-medium text-slate-700 border-r border-slate-200">${r.inspector || 'Senior Auditor'}</td>`;
+        }
+
+        html += `
             <td class="p-3 text-right font-mono-num font-bold text-slate-800 border-r border-slate-200">${formatCur(r.bill)}</td>
             <td class="p-3 text-right font-mono-num font-bold text-sky-700 border-r border-slate-200">${formatCur(r.coComm)}</td>
             <td class="p-3 text-right font-mono-num font-bold text-sky-700 border-r border-slate-200">${formatCur(r.coFull)}</td>
             <td class="p-3 text-right font-mono-num font-bold text-emerald-700 border-r border-slate-200">${formatCur(r.salCo)}</td>
             <td class="p-3 text-right font-mono-num font-bold text-amber-700 border-r border-slate-200">${formatCur(r.salBank)}</td>
             
-            <td class="p-3 text-[11px] font-medium text-slate-800 leading-tight border-r border-slate-200 whitespace-normal min-w-[260px]">${r.remark}</td>
+            <td class="p-3 text-[11px] font-medium text-slate-800 leading-tight border-r border-slate-200 whitespace-normal min-w-[260px]">${r.remark} ${contextBadge}</td>
             <td class="p-3 text-center min-w-[140px]">${proofBtn}</td>
           </tr>
         `;
       });
 
-      if(displayCount === 0) html = `<tr><td colspan="10" class="text-center p-12 text-slate-400 font-medium"><i class="fa-solid fa-folder-open text-3xl mb-3 block opacity-50"></i>No records found matching criteria.</td></tr>`;
+      const totalCols = 10 + (dynamicCols.dateTime ? 1 : 0) + (dynamicCols.nidMobile ? 1 : 0) + (dynamicCols.inspector ? 1 : 0);
+
+      if(displayCount === 0) html = `<tr><td colspan="${totalCols}" class="text-center p-12 text-slate-400 font-medium"><i class="fa-solid fa-folder-open text-3xl mb-3 block opacity-50"></i>No records found matching criteria.</td></tr>`;
       
       tbody.innerHTML = html;
       
+      // Dynamic Footer Colspan Calculation
+      const preCols = 3 + (dynamicCols.dateTime ? 1 : 0) + (dynamicCols.nidMobile ? 1 : 0) + (dynamicCols.inspector ? 1 : 0);
+      document.getElementById('tableFooter').innerHTML = `
+        <tr>
+          <td colspan="${preCols}" class="p-3 text-right text-xs uppercase tracking-wider">VISIBLE FILTERED TOTALS:</td>
+          <td class="p-3 text-right font-mono-num text-sm" id="footBill">0.00</td>
+          <td class="p-3 text-right font-mono-num text-sm text-sky-800" id="footComm">0.00</td>
+          <td class="p-3 text-right font-mono-num text-sm text-sky-800" id="footCoFull">0.00</td>
+          <td class="p-3 text-right font-mono-num text-sm text-emerald-800" id="footSalCo">0.00</td>
+          <td class="p-3 text-right font-mono-num text-sm text-amber-800" id="footSalBank">0.00</td>
+          <td colspan="2" class="p-3 text-slate-500 text-[10px] font-medium" id="footNote">Calculated based on current view.</td>
+        </tr>
+      `;
+
       // Update Footers & Metrics
       document.getElementById('footBill').innerText = tb.toLocaleString('en-US', {minimumFractionDigits: 2});
       document.getElementById('footComm').innerText = tcc.toLocaleString('en-US', {minimumFractionDigits: 2});
@@ -951,7 +1117,6 @@
     };
 
     function findRecord(recordId) {
-      // Look up in fullCensusDB or summaryHitListDB
       let r = fullCensusDB.find(x => x.id === recordId);
       if (!r) r = summaryHitListDB.find(x => x.id === recordId);
       if (!r && recordId.startsWith("REC_")) {
@@ -985,10 +1150,10 @@
         explanation = `<strong>DUAL BILLING & COLLECTION DETECTED:</strong> Bank Advice Letter confirms the Bank directly settled guard payroll from Head Office under ${r.bank} Clearing Seal. Concurrently, Best Force Ltd. issued an official stamped invoice for the full net bill (<strong>BDT ${r.coFull ? r.coFull.toLocaleString() : '47,348'}</strong>), resulting in double billing.`;
         matchType = "Direct Bank Pay vs. Full Co. Invoice";
       } else if (r.remark.includes('GHOST PAYROLL')) {
-        explanation = `<strong>GHOST BENEFICIARY DISCREPANCY:</strong> The names authorized on the ${r.bank} Central Advice Letter are fictitious accounts. True on-ground guards were disbursed smaller remittances via Upay mobile wallet, while unauthorized beneficiaries drew bank funds directly.`;
+        explanation = `<strong>GHOST BENEFICIARY DISCREPANCY:</strong> The names authorized on the ${r.bank} Central Advice Letter (Kamal, Mohi) are fictitious accounts. True on-ground workers were disbursed smaller remittances via Upay mobile wallet, while unauthorized beneficiaries drew bank funds directly.`;
         matchType = "Fictitious Beneficiary / Disparity";
       } else if (r.remark.includes('POOLING')) {
-        explanation = `<strong>FUNDS POOLING DETECTED:</strong> Salaries intended for multiple guard personnel were pooled and remitted into a single individual account, bypassing verified guard attendance rosters.`;
+        explanation = `<strong>FUNDS POOLING DETECTED:</strong> Salaries intended for multiple guard personnel were pooled and remitted into a single individual account (A/C of Utpal Biswas / Hafizul Islam / Syndicate MSISDN 01963601463), bypassing verified guard attendance rosters.`;
         matchType = "Single Account Consolidation";
       }
 
@@ -1011,10 +1176,10 @@
       else if (r.remark.includes('Nazrul')) recipientName = "Nazrul (Direct Bank Account)";
       else if (r.remark.includes('Sadek')) recipientName = "Sadek & Nurul (Direct Bank Credit)";
       else if (r.remark.includes('Soukat')) recipientName = "Soukat Jahan Khan (A/C #...8412)";
-      else if (r.remark.includes('Utpal')) recipientName = "Utpal Biswas (Single Pooled A/C)";
-      else if (r.remark.includes('Hafizul')) recipientName = "Hafizul Islam (Single Draw A/C)";
+      else if (r.remark.includes('Utpal')) recipientName = "Utpal Biswas (Single Pooled A/C - 01963601463)";
+      else if (r.remark.includes('Hafizul')) recipientName = "Hafizul Islam (Single Draw A/C - 01963601463)";
       else if (r.remark.includes('Abdus Salam')) recipientName = "Abdus Salam (Single Draw A/C)";
-      else if (r.remark.includes('Kamal')) recipientName = "Kamal / Mohi (Bank Advice Names)";
+      else if (r.remark.includes('Kamal')) recipientName = "Kamal / Mohi (Fake Bank Advice Names)";
       
       document.getElementById('docBankRecipient').innerText = recipientName;
       const bankPaid = r.salBank || 0;
@@ -1066,14 +1231,10 @@
     function closeModal() {
       const modal = document.getElementById('evidenceModal');
       const content = document.getElementById('modalContent');
-      
       modal.classList.add('opacity-0');
       content.classList.remove('scale-100');
       content.classList.add('scale-95');
-      
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 300);
+      setTimeout(() => modal.classList.add('hidden'), 300);
     }
 
     // ==========================================
@@ -1098,28 +1259,38 @@
 
         const wb = XLSX.utils.book_new();
         
+        let headerRow = ["SL NO", "BANK", "BRANCH / SUB-BRANCH", "DUTY POST"];
+        if (dynamicCols.dateTime) headerRow.push("DATE / TIME");
+        if (dynamicCols.nidMobile) headerRow.push("NID / MOBILE MSISDN");
+        if (dynamicCols.inspector) headerRow.push("INSPECTOR / AUDITOR");
+        headerRow.push("TOTAL BILL (INVOICED)", "CO. RECEIVED: COMMISSION", "CO. RECEIVED: FULL BILL", "SALARY BY COMPANY", "SALARY BY BANK", "REMARK / AUDIT FINDING");
+
         const ws_data = [
           [`MASTER FINANCIAL FLOW & FRAUD CATCHER (${viewTitle})`],
           ["Tracking Exact Flow: Invoice -> Collection -> Disbursement"],
           [],
-          ["SL NO", "BANK", "BRANCH / SUB-BRANCH", "DUTY POST", "TOTAL BILL OF SERVICE (INVOICED)", "CO. RECEIVED: COMMISSION ONLY", "CO. RECEIVED: FULL BILL", "SALARY GIVEN BY COMPANY", "SALARY GIVEN BY BANK", "REMARK / AUDIT FINDING"]
+          headerRow
         ];
 
         activeDB.forEach((r, i) => {
-          ws_data.push([
-            i + 1, r.bank, r.branch, r.post, 
-            r.bill || "", r.coComm || "", r.coFull || "", 
-            r.salCo || "", r.salBank || "", r.remark
-          ]);
+          let row = [i + 1, r.bank, r.branch, r.post];
+          if (dynamicCols.dateTime) row.push("2026-09-14 14:30");
+          if (dynamicCols.nidMobile) row.push(r.mobile || "");
+          if (dynamicCols.inspector) row.push(r.inspector || "Senior Auditor");
+          row.push(r.bill || "", r.coComm || "", r.coFull || "", r.salCo || "", r.salBank || "", r.remark);
+          ws_data.push(row);
         });
 
         const ws = XLSX.utils.aoa_to_sheet(ws_data);
 
         // Native Column Widths
         ws['!cols'] = [
-          {wch: 6}, {wch: 10}, {wch: 24}, {wch: 32}, 
-          {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 65}
+          {wch: 6}, {wch: 10}, {wch: 24}, {wch: 32}
         ];
+        if (dynamicCols.dateTime) ws['!cols'].push({wch: 18});
+        if (dynamicCols.nidMobile) ws['!cols'].push({wch: 24});
+        if (dynamicCols.inspector) ws['!cols'].push({wch: 20});
+        ws['!cols'].push({wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 65});
 
         XLSX.utils.book_append_sheet(wb, ws, "Financial Flow Master");
 
@@ -1127,7 +1298,7 @@
 
       } catch (err) {
         console.error("Export Error:", err);
-        alert("Download failed. Please ensure your mobile browser allows file downloads.");
+        alert("Download failed. Please ensure your browser allows file downloads.");
       }
     }
 

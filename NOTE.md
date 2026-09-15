@@ -1,4 +1,4 @@
-﻿# 📋 BEST FORCE LTD. — COMPANY & BANK AUDIT REPORT SYSTEM
+# 📋 BEST FORCE LTD. — COMPANY & BANK AUDIT REPORT SYSTEM
 ## Master Project Note, Architecture & Changelog (`NOTE.md`)
 
 > **Project Name:** Best Force Ltd. — Company & Bank Audit Report System  
@@ -68,6 +68,34 @@
 ---
 
 ## 📜 Completed Updates & Changelog
+
+### [Update 007] — Integration of Project Roadmap, Adds-On Dynamic Audit Columns Architecture & Central Billing Context Engine (2026-09-15)
+- **Type:** Architectural Extension, Forensic Entity Tracking & Dynamic Column Injection  
+- **Status:** ✅ COMPLETED  
+- **User Submission & Objective:**
+  > Comprehensive integration of the official "PROJECT DOCUMENTATION & ROADMAP" across client banks (SIBL, UCB, DBBL, and Modhumoti Bank PLC). Core objective: Detect, document, and expose internal payroll embezzlement (ghost guards, double billing, pooled accounts) bridging Client Invoices, Central Bank Advice Letters, and internal Upay field disbursements.
+- **Detailed Implementation Breakdown:**
+  1. **Dynamic Adds-On Architecture & Column Injection:**
+     - Engineered an interactive Adds-On control bar allowing forensic auditors to dynamically toggle three critical audit columns on the fly:
+       - **Audit Date / Time (`dateTime`):** Injects exact timestamp metadata (`YYYY-MM-DD HH:MM`) for field verification tracking.
+       - **NID / Mobile MSISDN (`nidMobile`):** Reveals payee identification numbers and Upay wallet linkages. Includes automated pattern recognition that triggers a pulsing crimson badge (`🚨 SYNDICATE POOL`) whenever the flagged syndicate account `01963601463` is detected.
+       - **Inspector Name (`inspector`):** Designates verified field auditors and forensic officers for sign-off accountability.
+     - Implemented dynamic table footer and empty state `colspan` recalculation logic so that total metrics and layout formatting remain pixel-perfect regardless of active column configuration.
+  2. **Interactive Centralized Billing `[?]` Context Badges:**
+     - Embedded contextual explainer tooltips for high-volume centralized billing posts:
+       - **DBBL ADC Bill-23 (BDT 2,420,000):** Explains that individual Fast Track ATM booths reflect BDT 0.00 / Commission only because DBBL disburses a single consolidated monthly master invoice directly to Head Office.
+       - **Modhumoti Bank Master Bill 01 (BDT 2,050,000):** Details centralized branch cluster security disbursements managed through central bank operations.
+  3. **Forensic Modal Entity Attribution:**
+     - Upgraded the fraud catcher modal and cross-verification comparison engine to bind specific perpetrators to their respective fraud typologies:
+       - **Funds Pooling:** Utpal Biswas, Hafizul Islam, and Abdus Salam linked to pooled draw accounts and MSISDN `01963601463`.
+       - **Ghost Payroll:** Kamal / Mohi flagged as fictitious beneficiary accounts listed on central bank advice letters while lower remittances were disbursed to true field guards.
+       - **Dual Billing:** Direct bank settlements under bank clearing seals contrasted against concurrent full Best Force Ltd. invoices.
+  4. **Native SheetJS (.xlsx) Dynamic Export Synchronization:**
+     - Updated `exportToExcel()` to dynamically inject active Adds-On columns (`Date/Time`, `NID/Mobile MSISDN`, `Inspector/Auditor`) with customized column widths (`wch`) into exported Excel spreadsheets.
+  5. **Dual-Sync & Instant Hostinger Deployment:**
+     - Synced updated `index.html` and `NOTE.md` across local workspace and Google Drive repository, pushed to GitHub `main`, triggering instant cloud auto-deployment to `https://audit.best-travel.ltd`.
+
+---
 
 ### [Update 006] — Highlighted High-Contrast Scrollers & Exclusive Fraud Alert Official Seal Verification Engine (2026-09-15)
 - **Type:** UI/UX High-Contrast Scroller & Forensic Seal Document Matching Overhaul  
@@ -178,9 +206,10 @@
 | **Phase 2** | **GitHub & Hostinger CI/CD Integration** | Automated repository push and Hostinger deployment pipeline. | ✅ Completed |
 | **Phase 3** | **Live Production Verification on Hostinger** | Verified live site functioning at `https://audit.best-travel.ltd`. | ✅ Completed |
 | **Phase 4** | **Highlighted Scrollers & Official Seals Engine** | 15px high-contrast scrollers, dedicated Fraud Alert Proof tab, and authentic Company Red Seal + Bank Blue Seal documents. | ✅ Completed |
-| **Phase 5** | **Dynamic Evidence Image Uploader & Viewer** | Allow attaching real scanned physical documents/vouchers to evidence modal and saving in local/cloud storage. | ⏳ Planned |
-| **Phase 6** | **Interactive Record Editor & New Post Entry** | Add ability to create, edit, or adjust post billing, salaries, and remarks directly from the web interface. | ⏳ Planned |
-| **Phase 7** | **Executive A4 Vector PDF Generation Engine** | High-precision vector PDF generator for formal Company Audit Reports and Bank Audit Statements with official signatures. | ⏳ Planned |
+| **Phase 5** | **Dynamic Adds-On Architecture & Syndicate Tracking** | Interactive column toggles (Date/Time, NID/Mobile with Syndicate Flag 01963601463, Inspector) & dynamic Excel export sync. | ✅ Completed |
+| **Phase 6** | **Physical Evidence Image Uploader & Multi-Document Attachments** | Support attaching real scanned physical documents/vouchers/stamps into the evidence modal and saving in cloud storage. | ⏳ Planned |
+| **Phase 7** | **Interactive Record Editor & New Post Entry** | Add ability to create, edit, or adjust post billing, salaries, and remarks directly from the web interface. | ⏳ Planned |
+| **Phase 8** | **Executive A4 Vector PDF Generation Engine** | High-precision vector PDF generator for formal Company Audit Reports and Bank Audit Statements with official seals and signatures. | ⏳ Planned |
 
 ---
 
