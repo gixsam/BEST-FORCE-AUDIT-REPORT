@@ -58,6 +58,31 @@
 
 ## 📜 Completed Updates & Changelog
 
+### [Update 015] — Python Excel Master Generator Sync & Forensic Claim Reconciliation Alignment (2026-09-15)
+- **Type:** Spreadsheet Engine Overhaul, Data Reconciliation & Forensic View Synchronization  
+- **Status:** ✅ COMPLETED  
+- **User Request / Objective:**
+  > Integrate the user-provided openpyxl Python Excel generator script (`generate_financial_flow_audit.py`), regenerate `Financial_Flow_Fraud_Catcher_Master.xlsx` and `A4_Financial_Flow_Fraud_Catcher_Master.xlsx`, align dataset reconciliation across Tajmohal Road, Dakkhin Khan (`⚖️ CLAIM RECONCILIATION`), Sherpur (`⚠️ AUDIT IRREGULARITY`), and ensure `[👁️ View Proof]` is enabled for all reconciliation and irregularity items in both web dashboards (`index.html` and `bank_salary_audit_report.html`).
+- **Detailed Implementation Breakdown:**
+  1. **Python Excel Engine Update (`generate_financial_flow_audit.py`):**
+     - Updated with openpyxl script implementing custom styling, distinct color palettes for Billing (`COL_BILL` #1E293B), Commission (`COL_COMM` #1E3A8A), Company Invoiced (`COL_CO` #064E3B), and Bank Payouts (`COL_BANK` #78350F).
+     - Automated conditional row highlighting: red fill (`#FEE2E2` / `#991B1B`) for `🚨 GHOST PAYROLL` / `🚨 DOUBLE BILLING`, amber fill (`#FEF3C7` / `#92400E`) for `⚠️ POOLED ACCOUNT` / `⚖️ CLAIM RECONCILIATION` / `⚠️ AUDIT IRREGULARITY`, and green fill (`#DCFCE7` / `#166534`) for `✅ CLEAN`.
+     - Executed via `.venv\Scripts\python.exe` and successfully generated both `Financial_Flow_Fraud_Catcher_Master.xlsx` (8,364 bytes) and `A4_Financial_Flow_Fraud_Catcher_Master.xlsx` (8,364 bytes).
+  2. **Data Model Reconciliation:**
+     - Tajmohal Road NCR ATM: Configured Bill 39,000 with 12,000 company commission (`coComm`) and 27,000 paid by company and bank each (54k total drain).
+     - Dakkhin Khan Branch & ATM: Flagged as `⚖️ CLAIM RECONCILIATION` (Bill-06 claimed Tk 47,348 net while bank paid Nazrul Tk 34,500; Bill-07 claimed Tk 38,352 net while bank paid Sadek & Nurul Tk 24,000). Noted requirement for salary deduction adjustments.
+     - Sherpur Branch: Flagged as `⚠️ AUDIT IRREGULARITY` (Bills 88 & 89 claimed Tk 103,950 while Soukat Jahan drew Tk 69,100 directly from bank advice).
+  3. **Forensic Proof Button Expansion (`isFraudAlert`):**
+     - Expanded detection regex/includes in `isFraudAlert(r)` to include `⚖️`, `⚠️`, `IRREGULARITY`, `SUSPICIOUS`, and `POOL`, ensuring forensic auditors can view official bank advice and company invoice seals for claim reconciliation and irregularity posts.
+  4. **Dual-File Synchronization (`index.html` & `bank_salary_audit_report.html`):**
+     - Fully mirrored all script and dataset updates between `index.html` and `bank_salary_audit_report.html`.
+  5. **Hostinger Deployment Script & Cloud Mirroring:**
+     - Updated `deploy_to_hostinger.py` to ensure `Financial_Flow_Fraud_Catcher_Master.xlsx`, `A4_Financial_Flow_Fraud_Catcher_Master.xlsx`, and `bank_salary_audit_report.html` are included in deployment sync.
+     - Mirrored updated files to Google Drive cloud workspace (`G:\My Drive\ALL WEBSITE WORKPLACE\BEST FORCE LTD COMPANY AND BANK AUDIT REPORT\`).
+     - Pushed commits to GitHub `origin main` to trigger automatic Hostinger deployment on `https://audit.best-travel.ltd`.
+
+---
+
 ### [Update 014] — Master Architectural Merge & Image Evidence Integration (2026-09-15)
 - **Type:** Major UI/UX Merge & Forensic Module Upgrade  
 - **Status:** ✅ COMPLETED  
