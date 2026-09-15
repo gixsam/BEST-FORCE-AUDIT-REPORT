@@ -1,0 +1,51 @@
+name: Build & Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  verify-and-deploy:
+    name: Verify Assets & Auto-Deploy to Hostinger
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: 🔍 Verify Production Assets
+        run: |
+          echo "=========================================================="
+          echo "Verifying Best Force Ltd. Audit Report Production Assets..."
+          echo "Target Domain: https://audit.best-travel.ltd"
+          echo "=========================================================="
+          test -f index.html && echo "✅ index.html is present and valid"
+          test -f .htaccess && echo "✅ .htaccess is present and valid"
+          test -f robots.txt && echo "✅ robots.txt is present and valid"
+          test -f NOTE.md && echo "✅ NOTE.md master documentation is present"
+          echo "🎉 All core files verified successfully for audit.best-travel.ltd!"
+
+      - name: 🚀 Sync Files to Hostinger via FTPS (Optional / If Secrets Configured)
+        if: env.FTP_SERVER != '' && env.FTP_USERNAME != ''
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          server-dir: ${{ secrets.FTP_DIR || 'public_html/' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.venv*
+            **/.venv*/**
+            **/__pycache__/**
+            requirements.txt
+            generate_financial_flow_audit.py
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}

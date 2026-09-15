@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BEST FORCE LTD | Master Financial Flow & Fraud Catcher</title>
+  
+  <!-- Tailwind CSS for Styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- SheetJS for Reliable Excel Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Tailwind Config for Corporate Branding -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandNavy: '#0F172A',     /* Slate 900 */
+            brandSlate: '#1E293B',    /* Slate 800 */
+            brandBlue: '#0369A1',     /* Sky 700 */
+            brandIce: '#F8FAFC',      /* Slate 50 */
+            accentGold: '#B45309',    /* Amber 700 */
+            alertRed: '#991B1B',      /* Red 800 */
+            alertRedBg: '#FEF2F2',    /* Red 50 */
+            alertWarn: '#92400E',     /* Amber 800 */
+            alertWarnBg: '#FFFBEB',   /* Amber 50 */
+            alertGreen: '#166534',    /* Green 800 */
+            alertGreenBg: '#F0FDF4',  /* Green 50 */
+          },
+          boxShadow: {
+            'glow': '0 0 15px rgba(3, 105, 161, 0.5)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background-color: #F1F5F9; 
+      color: #334155; 
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .font-mono-num { 
+      font-family: 'JetBrains Mono', monospace; 
+      letter-spacing: -0.02em;
+    }
+    
+    /* Custom Scrollbar for the Data Table */
+    .table-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+    .table-scroll::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 4px; }
+    .table-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; border: 2px solid #F1F5F9; }
+    .table-scroll::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+    /* Sticky Header Shadows */
+    th { position: sticky; top: 0; z-index: 10; }
+    
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); } }
+    .btn-export:hover { animation: pulse-glow 1.5s infinite; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- ========================================== -->
+  <!-- HEADER SECTION                             -->
+  <!-- ========================================== -->
+  <header class="bg-brandNavy text-white border-b-4 border-amber-500 sticky top-0 z-50 shadow-lg">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center border border-slate-600 shadow-inner">
+          <i class="fa-solid fa-magnifying-glass-dollar text-amber-400 text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg lg:text-xl font-bold tracking-tight uppercase text-white shadow-sm">
+            BEST FORCE LTD | MASTER FINANCIAL FLOW & FRAUD CATCHER
+          </h1>
+          <p class="text-xs text-amber-300 font-medium tracking-wide mt-0.5">
+            Full Resolution: DBBL &bull; SIBL &bull; UCB &bull; MMBPLC | Tracing Invoices vs. Actual Payouts
+          </p>
+        </div>
+      </div>
+      
+      <!-- Actions: Download & Adds-On -->
+      <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+        
+        <!-- Adds-On Dropdown Menu -->
+        <div class="relative inline-block text-left">
+          <button onclick="toggleAddonsMenu()" class="bg-brandSlate hover:bg-slate-700 text-white font-semibold px-4 py-2.5 rounded-lg shadow border border-slate-600 flex items-center space-x-2 transition active:scale-95 text-xs sm:text-sm">
+            <i class="fa-solid fa-puzzle-piece text-amber-400"></i>
+            <span>Adds-On Options</span>
+            <i class="fa-solid fa-chevron-down text-[10px] ml-1 opacity-70"></i>
+          </button>
+
+          <!-- Dropdown Content -->
+          <div id="addonsMenu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-50 text-xs transform origin-top-right transition-all">
+            
+            <div class="px-4 py-2 border-b border-slate-100">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Regional Filters</span>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="applyRegionFilter('ALL')" class="text-left px-2 py-1.5 rounded bg-brandNavy text-white font-semibold transition hover:bg-brandSlate">All Regions</button>
+                <button onclick="applyRegionFilter('Dhaka')" class="text-left px-2 py-1.5 rounded bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition">Dhaka Div</button>
+                <button onclick="applyRegionFilter('Chittagong')" class="text-left px-2 py-1.5 rounded bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition">Chittagong Div</button>
+                <button onclick="applyRegionFilter('Khulna')" class="text-left px-2 py-1.5 rounded bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition">Khulna Div</button>
+              </div>
+            </div>
+
+            <div class="py-1 border-b border-slate-100">
+              <span class="px-4 pt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sorting Sequence</span>
+              <button onclick="applySort('BANK_DEFAULT')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center space-x-2 text-slate-700 font-medium">
+                <i class="fa-solid fa-arrow-down-1-9 text-brandBlue w-4 text-center"></i>
+                <span>Bank Order (SIBL &rarr; DBBL)</span>
+              </button>
+              <button onclick="applySort('ALPHABETICAL')" class="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center space-x-2 text-slate-700 font-medium">
+                <i class="fa-solid fa-arrow-down-a-z text-brandBlue w-4 text-center"></i>
+                <span>Alphabetical (A - Z)</span>
+              </button>
+            </div>
+            
+            <div class="py-1">
+              <button onclick="resetFilters()" class="w-full text-left px-4 py-2 hover:bg-rose-50 flex items-center space-x-2 text-rose-700 font-semibold">
+                <i class="fa-solid fa-rotate-left w-4 text-center"></i>
+                <span>Reset All Filters</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Master Export Button -->
+        <button onclick="exportToExcel()" class="btn-export bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-5 py-2.5 rounded-lg shadow-lg border border-emerald-500 flex items-center space-x-2 transition active:scale-95 text-xs sm:text-sm">
+          <i class="fa-solid fa-download"></i>
+          <span>Download Master .XLSX</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- SUB-NAVIGATION & METRICS BAR               -->
+  <!-- ========================================== -->
+  <div class="bg-white border-b border-slate-300 shadow-sm sticky top-[73px] sm:top-[76px] z-40">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      
+      <!-- Primary Selectable Options (Your requested 5 buttons) -->
+      <div class="flex flex-wrap space-x-2 overflow-x-auto text-xs py-1 items-center w-full md:w-auto hide-scroll">
+        <button onclick="switchView('HIT_LIST')" id="btn-view-HIT_LIST" class="view-btn px-4 py-2 rounded-md font-bold shadow-sm transition whitespace-nowrap bg-brandNavy text-white">
+          <i class="fa-solid fa-crosshairs mr-1.5 text-rose-400"></i>Summary Hit-List
+        </button>
+        <button onclick="switchView('SINGLE_POSTS')" id="btn-view-SINGLE_POSTS" class="view-btn px-4 py-2 rounded-md font-semibold transition whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+          <i class="fa-solid fa-user-shield mr-1.5 text-brandBlue"></i>All Single Duty Post
+        </button>
+        <button onclick="switchView('DBBL_FT')" id="btn-view-DBBL_FT" class="view-btn px-4 py-2 rounded-md font-semibold transition whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+          <i class="fa-solid fa-bolt mr-1.5 text-amber-500"></i>DBBL Fast Track
+        </button>
+        <button onclick="switchView('MODHUMOTI')" id="btn-view-MODHUMOTI" class="view-btn px-4 py-2 rounded-md font-semibold transition whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+          <i class="fa-solid fa-building mr-1.5 text-indigo-500"></i>Modhumoti Branches
+        </button>
+        <button onclick="switchView('ALL_POSTS')" id="btn-view-ALL_POSTS" class="view-btn px-4 py-2 rounded-md font-semibold transition whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+          <i class="fa-solid fa-list-check mr-1.5 text-emerald-600"></i>All Post
+        </button>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="relative w-full md:w-64 flex-shrink-0">
+        <i class="fa-solid fa-search absolute left-3.5 top-2.5 text-slate-400 text-xs"></i>
+        <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="Search Branch, Post, or Remark..." class="w-full pl-9 pr-4 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brandBlue focus:border-brandBlue transition shadow-sm bg-slate-50 hover:bg-white">
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MAIN CONTENT AREA                          -->
+  <!-- ========================================== -->
+  <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-1 w-full flex flex-col space-y-4">
+    
+    <!-- Top Level Metric Cards (Auto-Updating) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow transition">
+        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Visible Posts</span>
+        <p class="text-xl sm:text-2xl font-bold text-brandNavy font-mono-num mt-1" id="metricCount">0</p>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow transition">
+        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Total Invoiced Bill</span>
+        <p class="text-xl sm:text-2xl font-bold text-slate-800 font-mono-num mt-1" id="metricBill">BDT 0.00</p>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 shadow-sm hover:shadow transition">
+        <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">Legal Commission</span>
+        <p class="text-xl sm:text-2xl font-bold text-emerald-800 font-mono-num mt-1" id="metricComm">BDT 0.00</p>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-rose-200 bg-rose-50/50 shadow-sm hover:shadow transition relative overflow-hidden">
+        <div class="absolute right-0 top-0 h-full w-2 bg-rose-500"></div>
+        <span class="text-[10px] font-bold text-rose-800 uppercase tracking-wider block">Fraud / Double Drain</span>
+        <p class="text-xl sm:text-2xl font-bold text-rose-700 font-mono-num mt-1" id="metricFraud">BDT 0.00</p>
+      </div>
+    </div>
+
+    <!-- The 10-Column Data Grid -->
+    <div class="bg-white rounded-xl shadow-lg border border-slate-300 overflow-hidden flex-1 flex flex-col">
+      <div class="overflow-x-auto table-scroll flex-1 max-h-[65vh]">
+        <table class="w-full text-left text-xs border-collapse whitespace-nowrap" id="masterTable">
+          <thead class="bg-brandSlate text-white shadow-md">
+            <tr>
+              <!-- The 9 Requested Columns + 1 "View Evidence" Column -->
+              <th class="p-3 text-center font-bold border-r border-slate-600 w-12 tracking-wide">SL NO</th>
+              <th class="p-3 font-bold border-r border-slate-600 min-w-[140px] tracking-wide">BRANCH / DIV</th>
+              <th class="p-3 font-bold border-r border-slate-600 min-w-[200px] tracking-wide">DUTY POST</th>
+              
+              <!-- Financial Columns (With slight background tints for visual separation) -->
+              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-slate-700 leading-tight">TOTAL BILL OF<br><span class="text-[10px] font-normal text-slate-300">SERVICE (INVOICED)</span></th>
+              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-sky-900 leading-tight">CO. RECEIVED:<br><span class="text-[10px] font-normal text-sky-300">COMMISSION ONLY</span></th>
+              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-sky-900 leading-tight">CO. RECEIVED:<br><span class="text-[10px] font-normal text-sky-300">FULL BILL</span></th>
+              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-emerald-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-emerald-300">BY COMPANY</span></th>
+              <th class="p-3 text-right font-bold border-r border-slate-600 min-w-[120px] bg-amber-900 leading-tight">SALARY GIVEN<br><span class="text-[10px] font-normal text-amber-300">BY BANK</span></th>
+              
+              <th class="p-3 font-bold border-r border-slate-600 min-w-[280px] tracking-wide">REMARK / AUDIT FINDING</th>
+              <th class="p-3 text-center font-bold w-24 tracking-wide bg-brandNavy">PROOF</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-slate-200">
+            <!-- Rendered by JavaScript -->
+          </tbody>
+          <tfoot class="bg-slate-100 text-brandNavy font-bold sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] border-t-2 border-brandSlate">
+            <tr>
+              <td colspan="3" class="p-3 text-right text-xs uppercase tracking-wider">VISIBLE FILTERED TOTALS:</td>
+              <td class="p-3 text-right font-mono-num text-sm" id="footBill">0.00</td>
+              <td class="p-3 text-right font-mono-num text-sm text-sky-800" id="footComm">0.00</td>
+              <td class="p-3 text-right font-mono-num text-sm text-sky-800" id="footCoFull">0.00</td>
+              <td class="p-3 text-right font-mono-num text-sm text-emerald-800" id="footSalCo">0.00</td>
+              <td class="p-3 text-right font-mono-num text-sm text-amber-800" id="footSalBank">0.00</td>
+              <td colspan="2" class="p-3 text-slate-500 text-[10px] font-medium" id="footNote">Calculated based on current view.</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- EVIDENCE MODAL (DARK MODE LIGHTBOX)        -->
+  <!-- ========================================== -->
+  <div id="evidenceModal" class="fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300" id="modalContent">
+      
+      <!-- Modal Header -->
+      <div class="bg-brandNavy text-white px-5 py-4 flex justify-between items-center border-b-4 border-amber-500 shrink-0">
+        <div>
+          <h3 class="text-sm sm:text-base font-bold flex items-center space-x-2">
+            <i class="fa-solid fa-file-shield text-amber-400"></i>
+            <span>Forensic Evidence Viewer</span>
+          </h3>
+          <p class="text-[11px] text-slate-300 mt-1 font-mono-num" id="modalPostTitle">Loading case details...</p>
+        </div>
+        <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20 transition text-slate-300 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-5 overflow-y-auto flex-1 bg-slate-50 space-y-6">
+        
+        <!-- Auditor's Note Box -->
+        <div class="bg-rose-50 border-l-4 border-rose-600 p-4 rounded-r-lg shadow-sm" id="modalAuditorNote">
+          <h4 class="text-xs font-bold text-rose-900 uppercase tracking-wider mb-2 flex items-center">
+            <i class="fa-solid fa-magnifying-glass mr-2"></i> Auditor's Explanation
+          </h4>
+          <p class="text-sm text-slate-800 leading-relaxed font-medium" id="modalExplanationText">
+            Explanation goes here.
+          </p>
+        </div>
+
+        <!-- Document Placeholders -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          
+          <!-- Doc 1 -->
+          <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+            <div class="bg-slate-100 px-3 py-2 border-b border-slate-200 flex items-center space-x-2">
+              <i class="fa-solid fa-file-invoice text-blue-600"></i>
+              <span class="text-xs font-bold text-slate-700">Company Invoice / Bill</span>
+            </div>
+            <div class="p-4 flex-1 flex items-center justify-center bg-slate-50 relative group">
+              <!-- Placeholder for actual image -->
+              <div class="text-center p-6 border-2 border-dashed border-slate-300 rounded-lg w-full">
+                <i class="fa-regular fa-image text-3xl text-slate-300 mb-2"></i>
+                <p class="text-xs font-mono-num text-slate-400">image_placeholder_1.jpg</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Doc 2 -->
+          <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+            <div class="bg-slate-100 px-3 py-2 border-b border-slate-200 flex items-center space-x-2">
+              <i class="fa-solid fa-building-columns text-emerald-600"></i>
+              <span class="text-xs font-bold text-slate-700">Bank Central Advice Letter</span>
+            </div>
+            <div class="p-4 flex-1 flex items-center justify-center bg-slate-50 relative group">
+              <!-- Placeholder for actual image -->
+              <div class="text-center p-6 border-2 border-dashed border-slate-300 rounded-lg w-full">
+                <i class="fa-regular fa-image text-3xl text-slate-300 mb-2"></i>
+                <p class="text-xs font-mono-num text-slate-400">image_placeholder_2.jpg</p>
+              </div>
+              
+              <!-- Example of a CSS Overlay "Red Circle" -->
+              <div class="absolute hidden group-hover:block top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-12 border-2 border-rose-500 rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.4)] z-10 pointer-events-none flex items-end justify-center pb-1">
+                <span class="text-[10px] font-bold text-white bg-rose-600 px-1 rounded absolute -bottom-4">Focus Here</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="bg-white px-5 py-3 border-t border-slate-200 flex justify-end shrink-0">
+        <button onclick="closeModal()" class="px-5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold shadow transition active:scale-95">
+          Acknowledge & Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toastAction" class="fixed bottom-5 right-5 z-[150] transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none bg-emerald-700 text-white px-5 py-3 rounded-lg shadow-xl flex items-center space-x-3">
+    <i class="fa-solid fa-download text-xl"></i>
+    <div>
+      <h4 class="font-bold text-sm">Download Started!</h4>
+      <p class="text-xs text-emerald-100">Your Master .XLSX file is saving to your device.</p>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT APPLICATION LOGIC               -->
+  <!-- ========================================== -->
+  <script>
+    // System State
+    let currentViewMode = 'HIT_LIST';
+    let currentRegion = 'ALL';
+    let currentSort = 'BANK_DEFAULT';
+    const BANK_ORDER = { "SIBL": 1, "UCB": 2, "MBBL": 3, "MMBPLC": 3, "DBBL": 4 };
+
+    // ==========================================
+    // 1. FULL 205-POST CENSUS DATABASE
+    // Structured perfectly for the 9-Column Flow
+    // ==========================================
+    const fullCensusDB = [
+      // SIBL (23 Posts)
+      { id: "S1", bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: 27000, salBank: 27000, remark: "🚨 FRAUD (DOUBLE PAY): Both salary columns filled! 54k paid out for a 27k post. Jahed (Bank) vs Sabbir/Mabudul (Co)." },
+      { id: "S2", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coComm: null, coFull: 47348, salCo: null, salBank: 34500, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full net bill but Bank paid Nazrul directly." },
+      { id: "S3", bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch ATM", bill: 44550, coComm: null, coFull: 38352, salCo: null, salBank: 24000, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full net bill but Bank paid Sadek & Nurul directly." },
+      { id: "S4", bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coComm: null, coFull: 103950, salCo: null, salBank: 69100, remark: "🚨 FRAUD: Full bill claimed while Bank directly paid Soukat Jahan Khan 69.1k." },
+      { id: "S5", bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "⚠️ FRAUD: 3 guards' salary (27k) pooled to single A/C of Utpal Biswas." },
+      { id: "S6", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch (4 Guards)", bill: 71375, coComm: 5944, coFull: null, salCo: null, salBank: 55500, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-08)." },
+      { id: "S7", bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM (3 Guards)", bill: 44550, coComm: 9285, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-09)." },
+      { id: "S8", bank: "SIBL", branch: "Mirpur, Dhaka", post: "Mirpur 12 NCR ATM (3 Guards)", bill: 44550, coComm: 11352, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission (Bill-11)." },
+      { id: "S9", bank: "SIBL", branch: "Gazipur", post: "Vogra Bashon Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "⚠️ High Single Payout: Bank letter pays Azhar Hossain 26k." },
+      { id: "S10", bank: "SIBL", branch: "Jashore", post: "Monirampur Branch NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Golam, Mehedi, Jakariya)" },
+      { id: "S11", bank: "SIBL", branch: "Khulna", post: "Khan Jahan Ali ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Rabin, Nazmul, Abidul)" },
+      { id: "S12", bank: "SIBL", branch: "Jhalakati", post: "Jhalakati Branch", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Barak, Sumon, Rakib)" },
+      { id: "S13", bank: "SIBL", branch: "Jashore", post: "Noapara NCR ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "✅ Direct Bank Paid (Saurav, Samim, Sakibul)" },
+      { id: "S14", bank: "SIBL", branch: "Narayanganj", post: "Sonargaon Branch ATM", bill: 32000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "✅ Direct Bank Paid (Antor, Nazrul)" },
+      { id: "S15", bank: "SIBL", branch: "Wari, Dhaka", post: "Islampur (Wari) NCR ATM", bill: 32000, coComm: null, coFull: null, salCo: null, salBank: 26000, remark: "✅ Direct Bank Paid (Rasel, Year Hossain)" },
+
+      // UCB (41 Central + 11 Local + 4 ADC = 56 Posts)
+      { id: "U1", bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coComm: null, coFull: null, salCo: 71000, salBank: 58000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names (Kamal/Mohi); Real workers paid via Upay (Company)." },
+      { id: "U2", bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coComm: null, coFull: null, salCo: 30000, salBank: 64000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 4 fake names; Real workers paid via Upay (Company)." },
+      { id: "U3", bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coComm: null, coFull: null, salCo: 52000, salBank: 55000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 3 fake names; Real workers paid via Upay (Company)." },
+      { id: "U4", bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coComm: null, coFull: 33000, salCo: null, salBank: 29800, remark: "⚠️ FRAUD (POOLING): Company received full bill, but bank paid 3 guards' money to single A/C (Idris Ali)." },
+      { id: "U5", bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch (Jasim)", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 32000, remark: "⚠️ SUSPICIOUS: Abnormally high single disbursement to Jasim Uddin." },
+      { id: "U6", bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coComm: 9513, coFull: null, salCo: 187500, salBank: null, remark: "✅ CLEAN: Company disbursed local bill (Bill-05)." },
+      { id: "U7", bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coComm: 1000, coFull: null, salCo: 10000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matches guard pay." },
+      { id: "U8", bank: "UCB", branch: "Tangail", post: "PKP Tangail ATM & CRM", bill: 49500, coComm: 5500, coFull: null, salCo: 44000, salBank: null, remark: "✅ CLEAN: ADC Bill-18 matches guard pay." },
+      { id: "U9", bank: "UCB", branch: "Moulvibazar Rd, Dhaka", post: "Dhaka South Regional Office", bill: 16000, coComm: 900, coFull: null, salCo: 15000, salBank: null, remark: "✅ CLEAN: Bill 17 matches guard pay." },
+      { id: "U10", bank: "UCB", branch: "Chittagong", post: "Bohaddarhat Branch", bill: 60000, coComm: null, coFull: null, salCo: null, salBank: 45000, remark: "✅ Direct Bank Paid (3 Regular Guards)" },
+      { id: "U11", bank: "UCB", branch: "Chittagong", post: "Halishahar Branch", bill: 60000, coComm: null, coFull: null, salCo: null, salBank: 43500, remark: "✅ Direct Bank Paid (3 Regular Guards)" },
+      { id: "U12", bank: "UCB", branch: "Chittagong", post: "Kumira University Gate", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "✅ Direct Bank Paid (3 Regular Guards)" },
+      { id: "U13", bank: "UCB", branch: "Khagrachhari", post: "Khagrachhari Regional", bill: 130000, coComm: null, coFull: null, salCo: null, salBank: 95822, remark: "⚠️ SUSPICIOUS: Lal Kuyatsai drawn 27k; others normal." },
+      { id: "U14", bank: "UCB", branch: "Baraipara, Dhaka", post: "Baraipara Branch", bill: 140000, coComm: null, coFull: null, salCo: null, salBank: 96000, remark: "⚠️ SUSPICIOUS: Supervisor Yasin drawn 25k; 6 guards normal." },
+
+      // DBBL 
+      { id: "D1", bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coComm: null, coFull: null, salCo: null, salBank: 60250, remark: "🚨 FRAUD (POOLING): Hafizul Islam paid Tk 35.2k single draw." },
+      { id: "D2", bank: "DBBL", branch: "Gazipur", post: "Gazipur Chowrasta Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 30000, remark: "🚨 ABNORMAL PAYOUT: Abdus Salam paid Tk 30k single draw." },
+      { id: "D3", bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coComm: 4600, coFull: null, salCo: null, salBank: 34400, remark: "✅ CLEAN: Math matches perfectly. Bank paid guards, company took commission." },
+      { id: "D4", bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coComm: 4000, coFull: null, salCo: null, salBank: 35000, remark: "✅ CLEAN: ADC Bill-23 matches guard pay." },
+      { id: "D5", bank: "DBBL", branch: "Sirajganj", post: "Ullapara Sirajganj FT", bill: 44850, coComm: 15500, coFull: null, salCo: null, salBank: 23500, remark: "⚠️ WIDE SPREAD: Guards paid 23k. Bill claims 44.8k." },
+      
+      // MBBL (Central Master Bill)
+      { id: "M1", bank: "MBBL", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coComm: null, coFull: 2052915, salCo: null, salBank: null, remark: "⚠️ AUDIT PENDING: Full net bill collected. Awaiting guard field payout reconciliation." }
+    ];
+
+    // Auto-generate DBBL ADC Fast Tracks (54 total) to complete Census
+    const dbbl_fts = ["Station Road Chandpur", "Madaripur", "New Ranir Bazar Cumilla", "Zia Sharani Road", "Khulna Road Moor Satkhira", "Shahidullah Kaiser Sarak Feni", "Thana Road Rawzan", "Toyebpur Zirabo", "Ferighat Road Chuadanga", "Airport Road Monipuri Para", "Rupnagar", "1 No. Building Mirpur-14", "Kazipur Sirajganj", "Kalampur", "Rangpur Community Hospital", "Dewalia Bari Konabari", "Denimach Gazipur Booth", "Bijoy Sarani Dhaka", "Nandipara Bazar Khilgaon", "Zoo Road Mirpur", "B. B. Avenue Gulistan", "Titas Road Rampura", "Envoy Textile Bhaluka", "Mawna Chowrasta", "Apex Chandra", "Boro Dewra Tongi", "Bijoy Nagar Branch", "C O Bazar RNG", "Zila Parisad RNG", "Mouchak Gazipur", "Sheikhpara Bazar Jhenaidah", "Khander Moor Bogura", "Circular Road Gaibandha", "Sadullapur", "Fulchori", "Kashipur", "Pathantola Sylhet", "Golapganj", "Baruthkhana Zindhabazar", "Nandina Bazar Jamalpur", "Delta Hospital", "Phulbari Kurigram", "City Port Ashkona", "Talha Fabrics", "Jamirdia Bhaluka", "BSMRAU Gazipur", "Digpait Branch", "Puraton Bazar Gaibandha", "Pollibiddut Savar", "Pahartoly Bazar"];
+    dbbl_fts.forEach((ft, index) => {
+      fullCensusDB.push({ 
+        id: `DFT${index}`, bank: "DBBL", branch: "ADC Division", post: `${ft} Fast Track`, 
+        bill: 44850, coComm: null, coFull: null, salCo: null, salBank: null, 
+        remark: "✅ ADC Bill-23 (Category-B)" 
+      });
+    });
+
+    // Auto-generate remaining MBBL Branches
+    const mmb_branches = ["Chhagalnaiya, Feni", "Sakhipur, Tangail", "Agrabad, Ctg", "Bheramara, Kushtia", "Rangpur", "Saidpur", "Ashulia, Savar", "Kanaipur", "Ashuganj", "Jibannagar", "Pirgonj", "Cox's Bazar", "Pragati Sarani", "Faridganj", "Kalia", "O.R. Nizam", "Bagerhat", "Shibchar", "Kabirhat", "Faridpur", "Banasree", "Uttara Sec-12", "Jhenaidah", "Panchchor", "Chuknagar", "Bajitpur", "Baralekha"];
+    mmb_branches.forEach((br, index) => {
+      fullCensusDB.push({ 
+        id: `MBR${index}`, bank: "MBBL", branch: br, post: `${br} Branch/Sub-branch`, 
+        bill: null, coComm: null, coFull: null, salCo: null, salBank: null, 
+        remark: "✅ Covered under Master Bill 01" 
+      });
+    });
+
+
+    // ==========================================
+    // 2. SUMMARY HIT-LIST DATABASE (Grouped 18 Items)
+    // ==========================================
+    const summaryHitListDB = [
+      { bank: "SIBL", branch: "Mohammadpur, Dhaka", post: "Tajmohal Road NCR ATM", bill: 39000, coComm: null, coFull: 39000, salCo: 27000, salBank: 27000, remark: "🚨 FRAUD (DOUBLE PAY): Both salary columns filled. 54k paid out for a 27k post. Jahed (Bank) vs Sabbir/Mabudul (Co)." },
+      { bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan Branch", bill: 55000, coComm: null, coFull: 55000, salCo: null, salBank: 34500, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full bill but Bank paid Nazrul directly." },
+      { bank: "SIBL", branch: "Dakkhin Khan, Dhaka", post: "Dakkhin Khan ATM", bill: 44550, coComm: null, coFull: 44550, salCo: null, salBank: 24000, remark: "🚨 FRAUD (DOUBLE BILLING): Company took full bill but Bank paid Sadek & Nurul directly." },
+      { bank: "SIBL", branch: "Sherpur", post: "S.S Filling & Babor Rice Mill", bill: 103950, coComm: null, coFull: 103950, salCo: null, salBank: 69100, remark: "🚨 FRAUD: Full bill claimed while Bank directly paid Soukat Jahan Khan 69.1k." },
+      { bank: "SIBL", branch: "Khulna", post: "Hazi Mohshin Road ATM", bill: 39000, coComm: null, coFull: null, salCo: null, salBank: 27000, remark: "⚠️ FRAUD: 3 guards' salary (27k) sent to single A/C of Utpal Biswas." },
+      { bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Shyamoli Branch", bill: 71375, coComm: 5944, coFull: null, salCo: null, salBank: 55500, remark: "✅ CLEAN: Bank paid guards direct, Company took commission." },
+      { bank: "SIBL", branch: "Shyamoli, Dhaka", post: "Adabor NCR ATM", bill: 44550, coComm: 9285, coFull: null, salCo: null, salBank: 27000, remark: "✅ CLEAN: Bank paid guards direct, Company took commission." },
+      { bank: "UCB", branch: "Chittagong", post: "Station Road Branch", bill: 85000, coComm: null, coFull: null, salCo: 71000, salBank: 58000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names (Kamal/Mohi); Real workers paid via Upay (Company)." },
+      { bank: "UCB", branch: "Chittagong", post: "Dampara Branch", bill: 80000, coComm: null, coFull: null, salCo: 30000, salBank: 64000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid 4 fake names; Real workers paid via Upay (Company)." },
+      { bank: "UCB", branch: "Ashulia, Dhaka", post: "Narshinghpur Branch", bill: 75000, coComm: null, coFull: null, salCo: 52000, salBank: 55000, remark: "🚨 FRAUD (GHOST PAYROLL): Bank paid fake names; Real workers paid via Upay (Company)." },
+      { bank: "UCB", branch: "Tejgaon, Dhaka", post: "BAF Shaheen College ATM", bill: 39000, coComm: null, coFull: 33000, salCo: 29800, salBank: null, remark: "⚠️ FRAUD (POOLING): Company received full bill, paid 3 guards' money to single A/C (Idris Ali)." },
+      { bank: "UCB", branch: "Karnafuli, Ctg", post: "Bohaddarhat Branch", bill: 45000, coComm: null, coFull: null, salCo: null, salBank: 32000, remark: "⚠️ SUSPICIOUS: Abnormally high single disbursement to Jasim Uddin." },
+      { bank: "UCB", branch: "Moulvibazar, Sylhet", post: "Moulvibazar Branch (11 Staff)", bill: 198163, coComm: 9513, coFull: null, salCo: 187500, salBank: null, remark: "✅ CLEAN: Company disbursed local bill (Bill-05)." },
+      { bank: "UCB", branch: "Keraniganj, Dhaka", post: "Keraniganj ATM", bill: 11000, coComm: 1000, coFull: null, salCo: 10000, salBank: null, remark: "✅ CLEAN: ADC Bill matches perfectly." },
+      { bank: "DBBL", branch: "Boro Bazar", post: "Boro Bazar Branch", bill: 85000, coComm: null, coFull: null, salCo: null, salBank: 35250, remark: "🚨 FRAUD (POOLING): Hafizul Islam paid Tk 35.2k single draw." },
+      { bank: "DBBL", branch: "Turag, Dhaka", post: "Ranavola Sub Branch", bill: 44850, coComm: 4600, coFull: null, salCo: null, salBank: 34400, remark: "✅ CLEAN: Math matches perfectly. Bank paid guards, company took commission." },
+      { bank: "DBBL", branch: "Basaboo, Dhaka", post: "Basaboo Tempo Stand FT", bill: 44850, coComm: 4000, coFull: null, salCo: null, salBank: 35000, remark: "✅ CLEAN: ADC Bill-23 matches guard pay." },
+      { bank: "MMBPLC", branch: "Central (27 Locs)", post: "Master Bill (151+ Staff)", bill: 2384700, coComm: null, coFull: 2052915, salCo: null, salBank: null, remark: "⚠️ AUDIT PENDING: Full net bill collected. Awaiting guard field payout reconciliation." }
+    ];
+
+
+    // ==========================================
+    // 3. UI CONTROLS & RENDERING
+    // ==========================================
+
+    function toggleAddonsMenu() {
+      const menu = document.getElementById('addonsMenu');
+      if(menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        menu.style.opacity = '0';
+        menu.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          menu.style.opacity = '1';
+          menu.style.transform = 'scale(1)';
+        }, 10);
+      } else {
+        menu.classList.add('hidden');
+      }
+    }
+
+    // Close dropdown when clicking outside
+    window.onclick = function(event) {
+      if (!event.target.closest('.relative')) {
+        const menu = document.getElementById('addonsMenu');
+        if (menu) menu.classList.add('hidden');
+      }
+    }
+
+    function switchView(mode) {
+      currentViewMode = mode;
+      
+      // Update Button Styles
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.className = 'view-btn px-4 py-2 rounded-md font-semibold transition whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200';
+      });
+      const activeBtn = document.getElementById('btn-view-' + mode);
+      if (activeBtn) {
+        activeBtn.className = 'view-btn px-4 py-2 rounded-md font-bold shadow-sm transition whitespace-nowrap bg-brandNavy text-white';
+      }
+
+      renderTable();
+    }
+
+    function applyRegionFilter(region) {
+      currentRegion = region;
+      toggleAddonsMenu();
+      renderTable();
+    }
+
+    function applySort(sortMode) {
+      currentSort = sortMode;
+      toggleAddonsMenu();
+      renderTable();
+    }
+
+    function resetFilters() {
+      currentRegion = 'ALL';
+      currentSort = 'BANK_DEFAULT';
+      document.getElementById('searchInput').value = '';
+      toggleAddonsMenu();
+      switchView('HIT_LIST');
+    }
+
+    function formatCur(val) {
+      if (val === null || val === undefined || val === 0 || val === "") return '<span class="text-slate-300 font-normal">—</span>';
+      return Number(val).toLocaleString('en-US', {minimumFractionDigits: 2});
+    }
+
+    function renderTable() {
+      let activeDB = [];
+      let noteStr = "";
+
+      // 1. Filter by View Mode
+      if (currentViewMode === 'HIT_LIST') {
+        activeDB = [...summaryHitListDB];
+        noteStr = "Viewing Summary Hit-List (Grouped 18 Items)";
+      } else if (currentViewMode === 'SINGLE_POSTS') {
+        activeDB = fullCensusDB.filter(r => (r.bank === 'UCB' || r.bank === 'SIBL') && !r.branch.includes("ADC Division"));
+        noteStr = "Viewing All Single Duty Posts (UCB & SIBL)";
+      } else if (currentViewMode === 'DBBL_FT') {
+        activeDB = fullCensusDB.filter(r => r.bank === 'DBBL' && r.branch === "ADC Division");
+        noteStr = "Viewing DBBL Fast Tracks Only";
+      } else if (currentViewMode === 'MODHUMOTI') {
+        activeDB = fullCensusDB.filter(r => r.bank === 'MBBL' || r.bank === 'MMBPLC');
+        noteStr = "Viewing Modhumoti Branches Only";
+      } else {
+        activeDB = [...fullCensusDB];
+        noteStr = "Viewing Full Census (205+ Posts)";
+      }
+
+      // 2. Filter by Region
+      if (currentRegion !== 'ALL') {
+        activeDB = activeDB.filter(r => r.branch.toLowerCase().includes(currentRegion.toLowerCase()));
+        noteStr += ` | Filtered by: ${currentRegion}`;
+      }
+
+      // 3. Search Bar
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      if (q) {
+        activeDB = activeDB.filter(r => {
+          const searchStr = `${r.bank} ${r.branch} ${r.post} ${r.remark}`.toLowerCase();
+          return searchStr.includes(q);
+        });
+      }
+
+      // 4. Sorting
+      activeDB.sort((a, b) => {
+        if (currentSort === 'ALPHABETICAL') {
+          return a.post.localeCompare(b.post);
+        } else {
+          // Default Bank Order
+          const aOrder = BANK_ORDER[a.bank] || 99;
+          const bOrder = BANK_ORDER[b.bank] || 99;
+          return aOrder - bOrder;
+        }
+      });
+
+      const tbody = document.getElementById('tableBody');
+      let html = '';
+      let tb = 0, tcc = 0, tcf = 0, tsc = 0, tsb = 0;
+      let displayCount = 0;
+
+      activeDB.forEach((r, idx) => {
+        displayCount++;
+        tb += (r.bill || 0); 
+        tcc += (r.coComm || 0); 
+        tcf += (r.coFull || 0); 
+        tsc += (r.salCo || 0); 
+        tsb += (r.salBank || 0);
+        
+        // Row Styling based on Remarks
+        let rowClass = "hover:bg-slate-50 transition animate-fade-in";
+        if (r.remark.includes('🚨')) rowClass = "bg-alertRedBg hover:bg-red-100 transition animate-fade-in";
+        else if (r.remark.includes('⚠️')) rowClass = "bg-alertWarnBg hover:bg-amber-100 transition animate-fade-in";
+        else if (r.remark.includes('✅')) rowClass = "bg-alertGreenBg hover:bg-green-100 transition animate-fade-in";
+
+        // Bank Badge Styling
+        const badgeClass = r.bank === 'UCB' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 
+                           r.bank === 'SIBL' ? 'bg-blue-100 text-blue-800 border-blue-200' : 
+                           r.bank === 'DBBL' ? 'bg-sky-100 text-sky-800 border-sky-200' : 
+                           'bg-indigo-100 text-indigo-800 border-indigo-200';
+
+        // Evidence Button Logic
+        let proofBtn = `<span class="text-slate-300 text-[10px] italic">No Proof Req.</span>`;
+        if (r.remark.includes('🚨') || r.remark.includes('⚠️')) {
+          const safePost = r.post.replace(/'/g, "\\'");
+          const safeRemark = r.remark.replace(/'/g, "\\'");
+          proofBtn = `<button onclick="openEvidenceModal('${safePost}', '${safeRemark}')" class="bg-brandBlue hover:bg-blue-600 text-white px-2.5 py-1.5 rounded text-[10px] font-bold shadow transition active:scale-95 flex items-center space-x-1 mx-auto"><i class="fa-solid fa-eye"></i><span>View Proof</span></button>`;
+        }
+
+        html += `
+          <tr class="${rowClass} border-b border-slate-200" style="animation-delay: ${idx * 15}ms">
+            <td class="p-3 text-center font-semibold text-slate-500 border-r border-slate-200">${displayCount}</td>
+            <td class="p-3 border-r border-slate-200">
+              <div class="flex items-center space-x-2">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">${r.bank}</span>
+                <span class="font-semibold text-slate-700 truncate max-w-[100px]" title="${r.branch}">${r.branch}</span>
+              </div>
+            </td>
+            <td class="p-3 font-bold text-slate-900 border-r border-slate-200">${r.post}</td>
+            
+            <td class="p-3 text-right font-mono-num font-bold text-slate-800 border-r border-slate-200">${formatCur(r.bill)}</td>
+            <td class="p-3 text-right font-mono-num font-bold text-sky-700 border-r border-slate-200">${formatCur(r.coComm)}</td>
+            <td class="p-3 text-right font-mono-num font-bold text-sky-700 border-r border-slate-200">${formatCur(r.coFull)}</td>
+            <td class="p-3 text-right font-mono-num font-bold text-emerald-700 border-r border-slate-200">${formatCur(r.salCo)}</td>
+            <td class="p-3 text-right font-mono-num font-bold text-amber-700 border-r border-slate-200">${formatCur(r.salBank)}</td>
+            
+            <td class="p-3 text-[11px] font-medium text-slate-800 leading-tight border-r border-slate-200 whitespace-normal">${r.remark}</td>
+            <td class="p-3 text-center">${proofBtn}</td>
+          </tr>
+        `;
+      });
+
+      if(displayCount === 0) html = `<tr><td colspan="10" class="text-center p-12 text-slate-400 font-medium"><i class="fa-solid fa-folder-open text-3xl mb-3 block opacity-50"></i>No records found matching criteria.</td></tr>`;
+      
+      tbody.innerHTML = html;
+      
+      // Update Footers & Metrics
+      document.getElementById('footBill').innerText = tb.toLocaleString('en-US', {minimumFractionDigits: 2});
+      document.getElementById('footComm').innerText = tcc.toLocaleString('en-US', {minimumFractionDigits: 2});
+      document.getElementById('footCoFull').innerText = tcf.toLocaleString('en-US', {minimumFractionDigits: 2});
+      document.getElementById('footSalCo').innerText = tsc.toLocaleString('en-US', {minimumFractionDigits: 2});
+      document.getElementById('footSalBank').innerText = tsb.toLocaleString('en-US', {minimumFractionDigits: 2});
+      
+      document.getElementById('metricCount').innerText = displayCount;
+      document.getElementById('metricBill').innerText = 'BDT ' + tb.toLocaleString('en-US', {minimumFractionDigits: 2});
+      document.getElementById('metricComm').innerText = 'BDT ' + tcc.toLocaleString('en-US', {minimumFractionDigits: 2});
+      
+      // Calculate Total Fraud Exposure
+      let fraudTotal = 0;
+      activeDB.forEach(r => {
+        if(r.remark.includes('🚨') || r.remark.includes('⚠️')) {
+            fraudTotal += (r.salBank || 0);
+        }
+      });
+      document.getElementById('metricFraud').innerText = 'BDT ' + fraudTotal.toLocaleString('en-US', {minimumFractionDigits: 2});
+
+      document.getElementById('footNote').innerText = noteStr;
+    }
+
+    // ==========================================
+    // 4. EVIDENCE MODAL LOGIC
+    // ==========================================
+    function openEvidenceModal(postName, remarkText) {
+      const modal = document.getElementById('evidenceModal');
+      const content = document.getElementById('modalContent');
+      
+      document.getElementById('modalPostTitle').innerText = postName;
+      
+      let boldReason = remarkText;
+      if(remarkText.includes('DOUBLE PAY')) boldReason = "The company collected the money TWICE for the same post. Bank paid one person, Company billed for another.";
+      else if(remarkText.includes('DOUBLE BILLING')) boldReason = "Bank paid the guards directly from Head Office. The company completely ignored this and billed the local branch for the full amount again.";
+      else if(remarkText.includes('GHOST PAYROLL')) boldReason = "The names on the Bank Letter are fake (Ghosts). The real workers on the ground were paid much less via Upay mobile wallet.";
+      
+      document.getElementById('modalExplanationText').innerHTML = `
+        <ul class="list-disc pl-4 space-y-1 mt-1">
+          <li><strong>Original Finding:</strong> ${remarkText}</li>
+          <li class="text-rose-700 mt-2"><strong>Conclusion:</strong> ${boldReason}</li>
+        </ul>
+      `;
+
+      // Show Modal with Animation
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('evidenceModal');
+      const content = document.getElementById('modalContent');
+      
+      modal.classList.add('opacity-0');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    // ==========================================
+    // 5. BULLETPROOF NATIVE XLSX EXPORT (Mobile & PC)
+    // ==========================================
+    function exportToExcel() {
+      const toast = document.getElementById('toastAction');
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+
+      try {
+        let activeDB = [];
+        let viewTitle = "FULL CENSUS";
+        if (currentViewMode === 'HIT_LIST') { activeDB = summaryHitListDB; viewTitle = "SUMMARY HIT-LIST"; }
+        else if (currentViewMode === 'SINGLE_POSTS') { activeDB = fullCensusDB.filter(r => (r.bank === 'UCB' || r.bank === 'SIBL') && !r.branch.includes("ADC Division")); viewTitle = "ALL SINGLE DUTY POST (UCB & SIBL)"; }
+        else if (currentViewMode === 'DBBL_FT') { activeDB = fullCensusDB.filter(r => r.bank === 'DBBL' && r.branch === "ADC Division"); viewTitle = "DBBL FAST TRACK"; }
+        else if (currentViewMode === 'MODHUMOTI') { activeDB = fullCensusDB.filter(r => r.bank === 'MBBL' || r.bank === 'MMBPLC'); viewTitle = "MODHUMOTI BRANCHES"; }
+        else { activeDB = fullCensusDB; }
+
+        const wb = XLSX.utils.book_new();
+        
+        const ws_data = [
+          [`MASTER FINANCIAL FLOW & FRAUD CATCHER (${viewTitle})`],
+          ["Tracking Exact Flow: Invoice -> Collection -> Disbursement"],
+          [],
+          ["SL NO", "BANK", "BRANCH / SUB-BRANCH", "DUTY POST", "TOTAL BILL OF SERVICE (INVOICED)", "CO. RECEIVED: COMMISSION ONLY", "CO. RECEIVED: FULL BILL", "SALARY GIVEN BY COMPANY", "SALARY GIVEN BY BANK", "REMARK"]
+        ];
+
+        activeDB.forEach((r, i) => {
+          ws_data.push([
+            i + 1, r.bank, r.branch, r.post, 
+            r.bill || "", r.coComm || "", r.coFull || "", 
+            r.salCo || "", r.salBank || "", r.remark
+          ]);
+        });
+
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+
+        // Native Column Widths
+        ws['!cols'] = [
+          {wch: 6}, {wch: 10}, {wch: 24}, {wch: 32}, 
+          {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 65}
+        ];
+
+        XLSX.utils.book_append_sheet(wb, ws, "Financial Flow Master");
+
+        XLSX.writeFile(wb, `Financial_Flow_Audit_${currentViewMode}.xlsx`, { bookType: "xlsx", type: "binary" });
+
+      } catch (err) {
+        console.error("Export Error:", err);
+        alert("Download failed. Please ensure your mobile browser allows file downloads.");
+      }
+    }
+
+    // Initialize
+    window.onload = function() {
+      switchView('HIT_LIST');
+    };
+  </script>
+</body>
+</html>

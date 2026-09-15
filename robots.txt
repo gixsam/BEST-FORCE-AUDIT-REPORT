@@ -1,0 +1,4 @@
+﻿# Best Force Ltd. - Company & Bank Audit Report
+# Disallow web crawlers from indexing private financial audit data
+User-agent: *
+Disallow: /
