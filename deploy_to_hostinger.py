@@ -14,7 +14,15 @@ import sys
 import ftplib
 import argparse
 
-LOCAL_FILES = ["index.html", ".htaccess", "robots.txt", "A4_Financial_Flow_Fraud_Catcher_Master.xlsx"]
+LOCAL_FILES = [
+    "index.html", 
+    "bank_salary_audit_report.html", 
+    ".htaccess", 
+    "robots.txt", 
+    "A4_Financial_Flow_Fraud_Catcher_Master.xlsx",
+    "images/company_invoice.jpg",
+    "images/bank_advice_letter.jpg"
+]
 
 def upload_to_ftp(host, user, password, remote_dir="public_html", port=21, use_tls=True):
     print(f"[*] Connecting to Hostinger FTP {host}:{port}...")
@@ -44,6 +52,12 @@ def upload_to_ftp(host, user, password, remote_dir="public_html", port=21, use_t
         ftp.cwd(remote_dir)
     except Exception as e:
         print(f"[!] Warning navigating to {remote_dir} ({e}), current directory: {ftp.pwd()}")
+
+    # Ensure remote images/ directory exists
+    try:
+        ftp.mkd("images")
+    except Exception:
+        pass
 
     # Upload each production file
     base_dir = os.path.dirname(os.path.abspath(__file__))
